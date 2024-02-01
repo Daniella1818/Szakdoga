@@ -39,7 +39,7 @@ public class SecondStageOperator : AOperator
                 int diffY = eY - sY;
                 int diffZ = eZ - sZ;
                 if (sW == eW && sX == eX && (sX == 0 || sX == 2) &&
-                   (Math.Abs(diffY) == 1 || (sY == eY && Math.Abs(diffZ) == 1)))
+                   ((Math.Abs(diffY) == 1 && sZ == eZ) || (sY == eY && Math.Abs(diffZ) == 1)))
                     return true;
 
                 //Függõleges mozgás, itt az oszlop marad de ez csak 0 vagy 2 lehet!, sor változik 1-gyel
