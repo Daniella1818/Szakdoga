@@ -17,4 +17,13 @@ public abstract class AGame : MonoBehaviour
             Debug.LogWarning("A GameObject nem rendelkezik Renderer komponenssel, így nem lehet megváltoztatni a színét.");
         }
     }
+    protected Color GetCurrentPlayerColor(State currentState)
+    {
+        Color color;
+        if (currentState.CurrentPlayer == Stone.Red)
+            color = Color.red;
+        else
+            color = Color.blue;
+        return color;
+    }
 }

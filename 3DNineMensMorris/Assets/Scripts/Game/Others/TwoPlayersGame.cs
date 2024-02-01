@@ -9,6 +9,10 @@ public class TwoPlayersGame : AGame
     //rakott akkor
     private bool isNextPlayerCanPlay = false;
     private bool isPlaying = true;
+    private bool isFirstClick = false;
+
+    GameObject firstGameObject;
+    GameObject secondGameObject;
     void Start()
     {
         currentState = new State();
@@ -26,26 +30,26 @@ public class TwoPlayersGame : AGame
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    GameObject clickedObj = hit.collider.gameObject;
-                    Debug.Log("Kattintott objektum: " + clickedObj.name);
-                    Color color;
-                    if (currentState.CurrentPlayer == Stone.Red)
-                        color = Color.red;
-                    else
-                        color = Color.blue;
-
-                    string[] coords = clickedObj.name.Split(',');
-                    int w = int.Parse(coords[0]); int x = int.Parse(coords[1]);
-                    int y = int.Parse(coords[2]); int z = int.Parse(coords[3]);
-                    Position p = new Position(w, x, y, z);
-                    currentState = PlayersMove(currentState, p);
-                    Debug.Log(currentState.Table.Board[w, x, y, z]);
-                    Debug.Log("Red: " + currentState.redStoneCount + ", Blue: "
-                    + currentState.blueStoneCount);
-                    Debug.Log(currentState.Table.Board[0, 0, 0, 0]);
-                    ChangeColor(color, clickedObj);
-                    isNextPlayerCanPlay = true;
-                    Debug.Log(currentState.CurrentPlayer + " : " + currentState.CountMill());
+                    if (currentState.CurrentStage == Stage.First)
+                    {
+                        firstGameObject = hit.collider.gameObject;
+                        FirstStageStep(firstGameObject);
+                    }
+                    else if (currentState.CurrentStage == Stage.Second ||
+                             currentState.CurrentStage == Stage.Third)
+                    {
+                        if (!isFirstClick)
+                        {
+                            firstGameObject = hit.collider.gameObject;
+                            isFirstClick = true;
+                        }
+                        else
+                        {
+                            secondGameObject = hit.collider.gameObject;
+                            SecondOrThirdStageStep(firstGameObject, secondGameObject);
+                            isFirstClick = false;
+                        }
+                    }
                 }
             }
         }
@@ -53,8 +57,8 @@ public class TwoPlayersGame : AGame
     protected override IEnumerator Play()
     {
         //while (currentState.GetStatus() == Stone.Empty)
-        int i = 18;
-        while(i > 0)
+        int i = 30;
+        while(i >= 0)
         {
             i--;
             yield return StartCoroutine(PlayTurn());
@@ -77,13 +81,68 @@ public class TwoPlayersGame : AGame
         yield return null;
     }
 
-    private State PlayersMove(State currentState, Position position)
+    private State PlayersMove(Position startPosition, Position endPosition = null)
     {
-        FirstStageOperator op = null;
-        while (op == null || !op.IsApplicable(currentState))
+        AOperator op = null;
+
+        if (currentState.CurrentStage == Stage.First)
+            op = new FirstStageOperator(startPosition);
+        else if (currentState.CurrentStage == Stage.Second)
+            op = new SecondStageOperator(startPosition, endPosition);
+
+        if (op.IsApplicable(currentState))
         {
-            op = new FirstStageOperator(position);
+            isNextPlayerCanPlay = true;
+            Debug.Log("Current player: " + currentState.CurrentPlayer);
+            Debug.Log("Red: " + currentState.redStoneCount + ", Blue: " + currentState.blueStoneCount);
+            return op.Apply(currentState);
         }
-        return op.Apply(currentState);
+        else
+        {
+            firstGameObject = null;
+            secondGameObject = null;
+        }
+
+        return null;
+    }
+    //Itt egy kattintás után váltunk
+    private void FirstStageStep(GameObject clickedObj)
+    {
+        Position p = GetPositionOfGameObject(clickedObj);
+        State newState = PlayersMove(p);
+        if (newState != null)
+        {
+            ChangeColor(GetCurrentPlayerColor(currentState), clickedObj);
+            currentState = newState;
+        }
+    }
+    //Ehhez már két kattintás kell
+    private void SecondOrThirdStageStep(GameObject startPositionObj, GameObject endPositionObj)
+    {
+        Debug.Log("Elsõ kattintás: " + firstGameObject.name);
+        Debug.Log("Második kattintás: " + secondGameObject.name);
+        Position startPosition = GetPositionOfGameObject(startPositionObj);
+        Position endPosition = GetPositionOfGameObject(endPositionObj);
+
+        State newState = PlayersMove(startPosition, endPosition);
+        if (newState != null)
+        {
+            ChangeColor(Color.black, firstGameObject);
+            ChangeColor(GetCurrentPlayerColor(currentState), secondGameObject);
+            currentState = newState;
+        }
+    }
+
+    private Position GetPositionOfGameObject(GameObject gameObject)
+    {
+        if (gameObject.name.Contains(','))
+        {
+            string[] coords = gameObject.name.Split(',');
+            int w = int.Parse(coords[0]); int x = int.Parse(coords[1]);
+            int y = int.Parse(coords[2]); int z = int.Parse(coords[3]);
+            Position p = new Position(w, x, y, z);
+            return p;
+        }
+        return null;
     }
 }
