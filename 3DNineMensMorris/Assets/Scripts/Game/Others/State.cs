@@ -16,7 +16,7 @@ public class State
     //Ha remove stage van akkor ebbe mentjük az aktuálisat, hogy visszatudjunk térni rá
     public Stage LastStage;
 
-    public int blackStoneCount = 9, whiteStoneCount = 9;
+    public int redStoneCount = 0, blueStoneCount = 0;
 
     //Jelenlegi játékost cseréli, ez biztosítja, hogy egymás után lépjenek
     public void ChangePlayer()
@@ -31,15 +31,20 @@ public class State
     //lépni a játékosok.
     public Stone GetStatus()
     {
-        if (whiteStoneCount <= 2)
-            return Stone.Red;
-        else if (blackStoneCount <= 2)
-            return Stone.Blue;
+        if (CurrentStage == Stage.Second || CurrentStage == Stage.Third)
+        {
+            if (blueStoneCount <= 2)
+                return Stone.Red;
+            else if (redStoneCount <= 2)
+                return Stone.Blue;
+            else
+                return Stone.Empty;
+        }
         else
             return Stone.Empty;
     }
 
-    private int CountMill()
+    public int CountMill()
     {
         int mills = 0;
         for (int w = 0; w < 3; w++)
@@ -74,15 +79,20 @@ public class State
         //Szintek közötti átmenet
         for (int z = 0; z < 3; z += 2)
         {
+            //0,0,1,0 && 0,0,1,2
             if (Table.Board[0, 0, 1, z] == CurrentPlayer && Table.Board[1, 0, 1, z] == CurrentPlayer
                 && Table.Board[2, 0, 1, z] == CurrentPlayer)
                 mills++;
+            //0,1,0,0 && 0,1,0,2
             if (Table.Board[0, 1, 0, z] == CurrentPlayer && Table.Board[1, 1, 0, z] == CurrentPlayer
                 && Table.Board[2, 1, 0, z] == CurrentPlayer)
                 mills++;
+
+            //0,2,1,0 && 0,2,1,2
             if (Table.Board[0, 2, 1, z] == CurrentPlayer && Table.Board[1, 2, 1, z] == CurrentPlayer
                 && Table.Board[2, 2, 1, z] == CurrentPlayer)
                 mills++;
+            //0,1,2,0 && 0,1,2,2
             if (Table.Board[0, 1, 2, z] == CurrentPlayer && Table.Board[1, 1, 2, z] == CurrentPlayer
                 && Table.Board[2, 2, 2, z] == CurrentPlayer)
                 mills++;
@@ -91,6 +101,7 @@ public class State
         {
             for (int x = 0; x < 3; x += 2)
             {
+                //0,0,0,1 && 0,2,0,1 && 0,0,2,1 && 0,2,2,1
                 if (Table.Board[0, x, y, 1] == CurrentPlayer && Table.Board[1, x, y, 1] == CurrentPlayer &&
                 Table.Board[2, x, y, 1] == CurrentPlayer)
                     mills++;
@@ -105,6 +116,8 @@ public class State
         newState.CurrentStage = CurrentStage;
         newState.CurrentPlayer = CurrentPlayer;
         newState.Table = Table;
+        newState.redStoneCount = redStoneCount;
+        newState.blueStoneCount = blueStoneCount;
         return newState;
     }
 

@@ -9,12 +9,35 @@ public class Game : MonoBehaviour
 
     private void Start()
     {
-        // Inicializáld a solver-t, például egy AI scripttel
         solver = new MiniMaxSolver(5);
         currentState = new State();
-
-        // Indítsd el a játékot
         Play();
+    }
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject clickedObj = hit.collider.gameObject;
+                Debug.Log("Kattintott objektum: " + clickedObj.name);
+                Color color;
+                if (currentState.CurrentPlayer == Stone.Red)
+                    color = Color.red;
+                else
+                    color = Color.blue;
+
+                string[] coords = clickedObj.name.Split(',');
+                int w = int.Parse(coords[0]); int x = int.Parse(coords[1]); 
+                int y = int.Parse(coords[2]); int z = int.Parse(coords[3]);
+                Position p = new Position(w, x, y, z);
+                PlayersMove(currentState, p);
+                ChangeColor(color, clickedObj);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -27,52 +50,33 @@ public class Game : MonoBehaviour
         while(i >=0)
         {
             i--;
-            Debug.Log(currentState);
 
             if (playersTurn)
             {
-                if (Input.GetMouseButtonDown(0)) // 0 az egérgombbal történõ kattintásra vonatkozik
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
 
-                    if (Physics.Raycast(ray, out hit))
-                    {
-                        // Ellenõrizzük, hogy a kattintott objektum rendelkezik-e AOperator komponenssel
-                        GameObject clickedObject = hit.collider.gameObject;
-                        string[] matrixCoords = clickedObject.name.Split(',');
-                        int w = int.Parse(matrixCoords[0]); int x = int.Parse(matrixCoords[1]);
-                        int y = int.Parse(matrixCoords[2]); int z = int.Parse(matrixCoords[3]);
-                        FirstStageOperator op = new FirstStageOperator(new Position(w, x, y, z));
-
-                        if (op != null && op.IsApplicable(currentState))
-                        {
-                            currentState = op.Apply(currentState);
-                            Renderer rend = GetComponent<Renderer>();
-                            if (rend != null)
-                            {
-                                Color color;
-                                if (currentState.CurrentPlayer == Stone.Red)
-                                    color = Color.red;
-                                else
-                                    color = Color.blue;
-                                rend.material.color = color;
-                            }
-                        }
-                    }
-                }
             }
             else
             {
-                currentState = AIsMove(currentState);
+                //currentState = AIsMove(currentState);
+                PlayersMove(currentState, new Position(0,0,1,0));
+                ChangeColor(Color.blue, GameObject.Find("0,0,1,0"));
             }
 
-            //playersTurn = !playersTurn;
+            playersTurn = !playersTurn;
         }
 
-        Debug.Log(currentState);
-        Stone status = currentState.GetStatus();
-        Debug.Log("Winner: " + status);
+        //Stone status = currentState.GetStatus();
+        //Debug.Log("Winner: " + status);
+    }
+    private State PlayersMove(State currentState, Position position)
+    {
+        FirstStageOperator op = null;
+        while (op == null || !op.IsApplicable(currentState))
+        {
+            op = new FirstStageOperator(position);
+            Debug.Log(op.IsApplicable(currentState));
+        }
+        return op.Apply(currentState);
     }
 
     private State AIsMove(State currentState)
@@ -85,5 +89,18 @@ public class Game : MonoBehaviour
         }
 
         return nextState;
+    }
+
+    private void ChangeColor(Color newColor, GameObject obj)
+    {
+        Renderer rend = obj.GetComponent<Renderer>();
+        if (rend != null)
+        {
+            rend.material.color = newColor;
+        }
+        else
+        {
+            Debug.LogWarning("A GameObject nem rendelkezik Renderer komponenssel, így nem lehet megváltoztatni a színét.");
+        }
     }
 }
