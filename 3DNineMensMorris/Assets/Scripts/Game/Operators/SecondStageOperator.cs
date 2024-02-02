@@ -17,11 +17,24 @@ public class SecondStageOperator : AOperator
         State newState = (State)currentState.Clone();
         setPlaceEmpty(newState, startPosition);
         setStoneToPlace(newState, endPosition);
+        checkForRemoveStage(newState);
         return newState;
     }
 
     public override bool IsApplicable(State currentState)
     {
+        //Megnézzük, hogy az aktuális játékosnak hány korongja van, ha három akkor third stage
+        if(currentState.CurrentPlayer == Stone.Red)
+        {
+            if (currentState.redStoneCount == 3)
+                currentState.CurrentStage = Stage.Third;
+        }
+        else
+        {
+            if (currentState.blueStoneCount == 3)
+                currentState.CurrentStage = Stage.Third;
+        }
+
         //Jelenlegi stage az second-e
         if (currentState.CurrentStage == Stage.Second)
         {

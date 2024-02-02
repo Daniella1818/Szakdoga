@@ -21,14 +21,24 @@ public abstract class AOperator
         return currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
             (int)position.Z] == Stone.Empty;
     }
-
+    //Adott pozícióra teszi az aktuális játékost
     public void setStoneToPlace(State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y, (int)position.Z] = currentState.CurrentPlayer;
     }
+    //Felszabadítja a pozíciót
     public void setPlaceEmpty(State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
            (int)position.Z] = Stone.Empty;
+    }
+
+    public void checkForRemoveStage(State currentState)
+    {
+        if(currentState.CountMill() > 0)
+        {
+            currentState.LastStage = currentState.CurrentStage;
+            currentState.CurrentStage = Stage.Remove;
+        }
     }
 }

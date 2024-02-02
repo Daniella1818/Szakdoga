@@ -25,6 +25,7 @@ public class FirstStageOperator : AOperator
         if (newState.redStoneCount == 9 && newState.blueStoneCount == 9)
             newState.CurrentStage = Stage.Second;
 
+        checkForRemoveStage(newState);
         return newState;
     }
 
