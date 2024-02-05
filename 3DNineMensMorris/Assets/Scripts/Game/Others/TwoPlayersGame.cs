@@ -52,6 +52,7 @@ public class TwoPlayersGame : AGame
                         else
                         {
                             secondGameObject = hit.collider.gameObject;
+                            currentState.checkForSecondOrThirdStage();
                             SecondOrThirdStageStep(firstGameObject, secondGameObject);
                             isFirstClick = false;
                         }
@@ -111,12 +112,16 @@ public class TwoPlayersGame : AGame
     private void FirstStageStep(GameObject clickedObj)
     {
         Position p = GetPositionOfGameObject(clickedObj);
-        State newState = PlayersMove(p);
-        if (newState != null)
+        //Ezzel biztosítjuk, hogy ha rosszul kattint, akkor ne csináljon semmit
+        if (p != null)
         {
-            ChangeColor(GetCurrentPlayerColor(currentState), clickedObj);
-            currentState = newState;
-            CheckIfTheStateIsRemove(currentState);
+            State newState = PlayersMove(p);
+            if (newState != null)
+            {
+                ChangeColor(GetCurrentPlayerColor(currentState), clickedObj);
+                currentState = newState;
+                CheckIfTheStateIsRemove(currentState);
+            }
         }
     }
     //Ehhez már két kattintás kell
@@ -125,24 +130,30 @@ public class TwoPlayersGame : AGame
         Position startPosition = GetPositionOfGameObject(startPositionObj);
         Position endPosition = GetPositionOfGameObject(endPositionObj);
 
-        State newState = PlayersMove(startPosition, endPosition);
-        if (newState != null)
+        if (startPosition != null && endPosition != null)
         {
-            ChangeColor(Color.black, firstGameObject);
-            ChangeColor(GetCurrentPlayerColor(currentState), secondGameObject);
-            currentState = newState;
-            CheckIfTheStateIsRemove(currentState);
+            State newState = PlayersMove(startPosition, endPosition);
+            if (newState != null)
+            {
+                ChangeColor(Color.black, firstGameObject);
+                ChangeColor(GetCurrentPlayerColor(currentState), secondGameObject);
+                currentState = newState;
+                CheckIfTheStateIsRemove(currentState);
+            }
         }
     }
     private void RemoveStageStep(GameObject removeObject)
     {
         Position p = GetPositionOfGameObject(removeObject);
-        State newState = PlayersMove(p);
-        if(newState != null)
+        if (p != null)
         {
-            ChangeColor(Color.black, removeObject);
-            currentState = newState;
-            CheckIfTheStateIsRemove(currentState);
+            State newState = PlayersMove(p);
+            if (newState != null)
+            {
+                ChangeColor(Color.black, removeObject);
+                currentState = newState;
+                CheckIfTheStateIsRemove(currentState);
+            }
         }
     }
 
