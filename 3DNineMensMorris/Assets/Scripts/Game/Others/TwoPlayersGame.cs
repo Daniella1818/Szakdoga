@@ -26,11 +26,6 @@ public class TwoPlayersGame : AGame
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Current player: " + currentState.CurrentPlayer);
-                Debug.Log("Red: " + currentState.redStoneCount + ", Blue: " + currentState.blueStoneCount);
-                Debug.Log("Current stage: " + currentState.CurrentStage);
-                Debug.Log("Current player's mills: " + currentState.CountMill());
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
@@ -67,11 +62,8 @@ public class TwoPlayersGame : AGame
     }
     protected override IEnumerator Play()
     {
-        //while (currentState.GetStatus() == Stone.Empty)
-        int i = 30;
-        while(i >= 0)
+        while (currentState.GetStatus() == Stone.Empty)
         {
-            i--;
             yield return StartCoroutine(PlayTurn());
         }
         isPlaying = false;
@@ -93,6 +85,10 @@ public class TwoPlayersGame : AGame
 
     private State PlayersMove(Position startPosition, Position endPosition = null)
     {
+        Debug.Log("Current player: " + currentState.CurrentPlayer);
+        Debug.Log("Red: " + currentState.redStoneCount + ", Blue: " + currentState.blueStoneCount);
+        Debug.Log("Current stage: " + currentState.CurrentStage);
+
         AOperator op = null;
 
         if (currentState.CurrentStage == Stage.First)
@@ -101,33 +97,12 @@ public class TwoPlayersGame : AGame
             op = new SecondStageOperator(startPosition, endPosition);
         else if (currentState.CurrentStage == Stage.Third)
             op = new ThirdStageOperator(startPosition, endPosition);
-
-        if (currentState.CurrentStage == Stage.Remove)
-        {
-            if (removeCount < currentState.CountMill())
-            {
-                op = new RemoveStageOperator(startPosition);
-                if (op.IsApplicable(currentState))
-                {
-                    removeCount++;
-                    return op.Apply(currentState);
-                }
-            }
-            else
-            {
-                currentState.CurrentStage = currentState.LastStage;
-                removeCount = 0;
-            }
-        }
+        else if (currentState.CurrentStage == Stage.Remove)
+            op = new RemoveStageOperator(startPosition);
 
         if (op.IsApplicable(currentState))
         { 
             return op.Apply(currentState);
-        }
-        else
-        {
-            firstGameObject = null;
-            secondGameObject = null;
         }
 
         return null;
@@ -141,8 +116,7 @@ public class TwoPlayersGame : AGame
         {
             ChangeColor(GetCurrentPlayerColor(currentState), clickedObj);
             currentState = newState;
-            if (currentState.CurrentStage != Stage.Remove)
-                isNextPlayerCanPlay = true;
+            CheckIfTheStateIsRemove(currentState);
         }
     }
     //Ehhez már két kattintás kell
@@ -157,8 +131,7 @@ public class TwoPlayersGame : AGame
             ChangeColor(Color.black, firstGameObject);
             ChangeColor(GetCurrentPlayerColor(currentState), secondGameObject);
             currentState = newState;
-            if(currentState.CurrentStage != Stage.Remove)
-                isNextPlayerCanPlay = true;
+            CheckIfTheStateIsRemove(currentState);
         }
     }
     private void RemoveStageStep(GameObject removeObject)
@@ -169,6 +142,7 @@ public class TwoPlayersGame : AGame
         {
             ChangeColor(Color.black, removeObject);
             currentState = newState;
+            CheckIfTheStateIsRemove(currentState);
         }
     }
 
@@ -183,5 +157,24 @@ public class TwoPlayersGame : AGame
             return p;
         }
         return null;
+    }
+    private void CheckIfTheStateIsRemove(State currentState)
+    {
+        if (currentState.CurrentStage != Stage.Remove)
+            isNextPlayerCanPlay = true;
+        else
+        {
+            if (removeCount < currentState.currentPlayersMills)
+            {
+                removeCount++;
+            }
+            else
+            {
+                currentState.CurrentStage = currentState.LastStage;
+                removeCount = 0;
+                currentState.currentPlayersMills = 0;
+                isNextPlayerCanPlay = true;
+            }
+        }
     }
 }

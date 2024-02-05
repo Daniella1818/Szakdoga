@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Game : MonoBehaviour
+public class OnePlayerOneComputerGame : AGame
 {
     private ASolver solver;
     private State currentState;
+    //Addig amíg nem rakott a jelenlegi játékos addig maradjon false, azaz ne váltsunk játékost, majd ha
+    //rakott akkor
+    private bool isNextPlayerCanPlay = false;
+    private bool isPlaying = true;
+    private bool isFirstClick = false;
 
     private void Start()
     {
@@ -40,34 +45,6 @@ public class Game : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    private void Play()
-    {
-        bool playersTurn = true;
-
-        //while (currentState.GetStatus() == Stone.Empty)
-        int i = 2;
-        while(i >=0)
-        {
-            i--;
-
-            if (playersTurn)
-            {
-
-            }
-            else
-            {
-                //currentState = AIsMove(currentState);
-                PlayersMove(currentState, new Position(0,0,1,0));
-                ChangeColor(Color.blue, GameObject.Find("0,0,1,0"));
-            }
-
-            playersTurn = !playersTurn;
-        }
-
-        //Stone status = currentState.GetStatus();
-        //Debug.Log("Winner: " + status);
-    }
     private State PlayersMove(State currentState, Position position)
     {
         FirstStageOperator op = null;
@@ -91,16 +68,27 @@ public class Game : MonoBehaviour
         return nextState;
     }
 
-    private void ChangeColor(Color newColor, GameObject obj)
+    protected override IEnumerator Play()
     {
-        Renderer rend = obj.GetComponent<Renderer>();
-        if (rend != null)
+        while (currentState.GetStatus() == Stone.Empty)
         {
-            rend.material.color = newColor;
+            yield return StartCoroutine(PlayTurn());
         }
-        else
+        isPlaying = false;
+
+        Stone status = currentState.GetStatus();
+        Debug.Log("Winner: " + status);
+    }
+
+    IEnumerator PlayTurn()
+    {
+        while (!isNextPlayerCanPlay)
         {
-            Debug.LogWarning("A GameObject nem rendelkezik Renderer komponenssel, így nem lehet megváltoztatni a színét.");
+            yield return null;
         }
+
+        currentState.ChangePlayer();
+        isNextPlayerCanPlay = false;
+        yield return null;
     }
 }

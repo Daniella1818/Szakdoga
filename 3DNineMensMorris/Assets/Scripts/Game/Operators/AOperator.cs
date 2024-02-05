@@ -33,12 +33,32 @@ public abstract class AOperator
            (int)position.Z] = Stone.Empty;
     }
 
-    public void checkForRemoveStage(State currentState)
+    public void checkForRemoveStage(State currentState, Position position)
     {
-        if(currentState.CountMill() > 0)
+        if (currentState.CountMill(position) > 0)
         {
             currentState.LastStage = currentState.CurrentStage;
             currentState.CurrentStage = Stage.Remove;
+            currentState.currentPlayersMills = currentState.CountMill(position);
         }
+    }
+    public int CountPlayersStones(State currentState, Stone playerColor)
+    {
+        int playerStones = 0;
+        for (int w = 0; w < 3; w++)
+        {
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int z = 0; z < 3; z++)
+                    {
+                        if (currentState.Table.Board[w, x, y, z] == playerColor)
+                            playerStones++;
+                    }
+                }
+            }
+        }
+        return playerStones;
     }
 }

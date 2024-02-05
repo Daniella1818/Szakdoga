@@ -17,7 +17,7 @@ public class ThirdStageOperator : AOperator
         State newState = (State)currentState.Clone();
         setPlaceEmpty(newState, startPosition);
         setStoneToPlace(newState, endPosition);
-        checkForRemoveStage(newState);
+        checkForRemoveStage(newState, endPosition);
         return newState;
     }
 

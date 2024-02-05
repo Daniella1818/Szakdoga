@@ -15,10 +15,13 @@ public class RemoveStageOperator : AOperator
         State newState = (State)currentState.Clone();
         newState.Table.Board[(int)Position.W, (int)Position.X, (int)Position.Y, (int)Position.Z] = Stone.Empty;
 
-        if (currentState.CurrentPlayer == Stone.Red)
-            newState.blueStoneCount--;
-        else if (currentState.CurrentPlayer == Stone.Blue)
-            newState.redStoneCount--;
+        if (currentState.LastStage != Stage.First)
+        {
+            if (currentState.CurrentPlayer == Stone.Red)
+                newState.blueStoneCount--;
+            else if (currentState.CurrentPlayer == Stone.Blue)
+                newState.redStoneCount--;
+        }
 
         return newState;
     }

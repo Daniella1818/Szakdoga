@@ -15,17 +15,22 @@ public class FirstStageOperator : AOperator
         State newState = (State)currentState.Clone();
         setStoneToPlace(newState, position);
 
-        //Megnövelem a lerakott kövek számát a játékosnak megfelelõen
+        //Csökkentem a lerakható korongok számát
         if (currentState.CurrentPlayer == Stone.Red)
-            newState.redStoneCount++;
+            newState.redStoneCount--;
         else if (currentState.CurrentPlayer == Stone.Blue)
-            newState.blueStoneCount++;
+            newState.blueStoneCount--;
 
         //Megnézzük, hogy mindkettõ játékosnak le van-e rakva a 9-9 korongja, ha igen váltunk stage-t
-        if (newState.redStoneCount == 9 && newState.blueStoneCount == 9)
+        //Megszámoljuk kinek mennyi van és azt tároljuk el
+        if (newState.redStoneCount == 0 && newState.blueStoneCount == 0)
+        {
             newState.CurrentStage = Stage.Second;
+            newState.redStoneCount = CountPlayersStones(newState, Stone.Red);
+            newState.blueStoneCount = CountPlayersStones(newState, Stone.Blue);
+        }
 
-        checkForRemoveStage(newState);
+        checkForRemoveStage(newState, position);
         return newState;
     }
 
