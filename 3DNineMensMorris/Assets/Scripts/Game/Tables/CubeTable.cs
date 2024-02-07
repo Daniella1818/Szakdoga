@@ -15,6 +15,7 @@ public class CubeTable : ATable
                 {
                     for (int z = 0; z < Board.GetLength(3); z++)
                     {
+                        //A mátrix középét nem használjuk!
                         Board[w, x, y, z] = Stone.Empty;
                     }
                 }

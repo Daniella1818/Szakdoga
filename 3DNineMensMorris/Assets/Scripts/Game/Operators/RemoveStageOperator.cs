@@ -37,7 +37,10 @@ public class RemoveStageOperator : AOperator
                 enemy = Stone.Red;
 
             if (stoneIsPlayers(currentState, enemy, Position))
-                return true;
+            {
+                if(currentState.CountMill(Position, enemy) == 0)
+                    return true;
+            }
         }
 
         return false;

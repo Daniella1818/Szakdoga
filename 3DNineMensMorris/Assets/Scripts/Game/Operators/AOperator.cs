@@ -35,11 +35,11 @@ public abstract class AOperator
 
     public void checkForRemoveStage(State currentState, Position position)
     {
-        if (currentState.CountMill(position) > 0)
+        if (currentState.CountMill(position, currentState.CurrentPlayer) > 0)
         {
             currentState.LastStage = currentState.CurrentStage;
             currentState.CurrentStage = Stage.Remove;
-            currentState.currentPlayersMills = currentState.CountMill(position);
+            currentState.currentPlayersMills = currentState.CountMill(position, currentState.CurrentPlayer);
         }
     }
     public int CountPlayersStones(State currentState, Stone playerColor)
