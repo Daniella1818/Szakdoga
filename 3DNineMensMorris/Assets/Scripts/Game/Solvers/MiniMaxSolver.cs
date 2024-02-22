@@ -23,15 +23,44 @@ public class MiniMaxSolver : ASolver
     {
         if (node.GetStatus() != Stone.Empty || node.Depth >= Depth) return;
 
-        foreach (AOperator op in AllOperator)
+        if(node.State.CurrentStage == Stage.First) 
         {
-            if (op.IsApplicable(node.State))
+            foreach (AOperator op in FirstStageOperators)
             {
-                State newState = op.Apply(node.State);
-                Node newNode = new Node(newState, node);
-                node.Children.Add(newNode);
-                extendNode(newNode);
+                CheckTheOperator(node, op);
             }
+        }
+        else if(node.State.CurrentStage == Stage.Second)
+        {
+            foreach (AOperator op in SecondStageOperators)
+            {
+                CheckTheOperator(node, op);
+            }
+        }
+        else if(node.State.CurrentStage == Stage.Third)
+        {
+            foreach (AOperator op in ThirdStageOperators)
+            {
+                CheckTheOperator(node, op);
+            }
+        }
+        else if(node.State.CurrentStage == Stage.Remove)
+        {
+            foreach (AOperator op in RemoveStageOperators)
+            {
+                CheckTheOperator(node, op);
+            }
+        }
+    }
+
+    private void CheckTheOperator(Node node, AOperator op)
+    {
+        if (op.IsApplicable(node.State))
+        {
+            State newState = op.Apply(node.State);
+            Node newNode = new Node(newState, node);
+            node.Children.Add(newNode);
+            extendNode(newNode);
         }
     }
 }

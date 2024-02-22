@@ -23,6 +23,8 @@ public class RemoveStageOperator : AOperator
                 newState.redStoneCount--;
         }
 
+        newState.currentPlayersMills--;
+        checkIfStillRemoveStage(newState);
         return newState;
     }
 

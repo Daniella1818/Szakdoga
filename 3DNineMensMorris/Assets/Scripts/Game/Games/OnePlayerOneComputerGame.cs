@@ -13,12 +13,12 @@ public class OnePlayerOneComputerGame : AGame
     private void Start()
     {
         currentState = new State();
-        solver = new MiniMaxSolver(1);
-        Play();
+        solver = new MiniMaxSolver(3);
+        StartCoroutine(Play());
     }
     void Update()
     {
-        if (isPlaying)
+        if (isNextPlayerCanPlay)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -58,38 +58,34 @@ public class OnePlayerOneComputerGame : AGame
         }
     }
 
-    protected void Playe() // Módosított, nem Coroutine
+    IEnumerator PlayerTurn()
     {
-        while (currentState.GetStatus() == Stone.Empty)
+        while (isNextPlayerCanPlay)
         {
-            if (isPlayersTurn)
-                PlayerTurn();
-            else
-                AITurn();
-
-            isPlayersTurn = !isPlayersTurn;
+            yield return null;
         }
-        isPlaying = false;
-
-        Stone status = currentState.GetStatus();
-        Debug.Log("Winner: " + status);
+        yield return null;
     }
 
-    void PlayerTurn()
-    {
-        currentState.ChangePlayer();
-    }
-
-    void AITurn()
+    IEnumerator AITurn()
     {
         currentState = AIsMove(solver);
         ColorTableAfterAIsMove(currentState);
-        currentState.ChangePlayer();
-        isPlayersTurn = !isPlayersTurn;
+        CheckIfTheStateIsStillRemove();
+        yield return null;
     }
 
     protected override IEnumerator Play()
     {
-        throw new System.NotImplementedException();
+        while (currentState.GetStatus() == Stone.Empty)
+        {
+            if (isNextPlayerCanPlay)
+                yield return StartCoroutine(PlayerTurn());
+            else
+                yield return StartCoroutine(AITurn());
+        }
+
+        Stone status = currentState.GetStatus();
+        Debug.Log("Winner: " + status);
     }
 }

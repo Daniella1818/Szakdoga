@@ -4,7 +4,10 @@ using UnityEngine;
 
 public abstract class ASolver
 {
-    public List<AOperator> AllOperator = new List<AOperator>();
+    public List<FirstStageOperator> FirstStageOperators = new List<FirstStageOperator>();
+    public List<SecondStageOperator> SecondStageOperators = new List<SecondStageOperator>();
+    public List<ThirdStageOperator> ThirdStageOperators = new List<ThirdStageOperator>();
+    public List<RemoveStageOperator> RemoveStageOperators = new List<RemoveStageOperator>();
 
     public ASolver()
     {
@@ -20,8 +23,8 @@ public abstract class ASolver
                 {
                     for (int z = 0; z < 3; z++)
                     {
-                        AllOperator.Add(new FirstStageOperator(new Position(w, x, y, z)));
-                        //AllOperator.Add(new RemoveStoneOperator(new Position(w, x, y, z)));
+                        FirstStageOperators.Add(new FirstStageOperator(new Position(w, x, y, z)));
+                        RemoveStageOperators.Add(new RemoveStageOperator(new Position(w, x, y, z)));
                         for (int w2 = 0; w2 < 3; w2++)
                         {
                             for (int x2 = 0; x2 < 3; x2++)
@@ -30,8 +33,8 @@ public abstract class ASolver
                                 {
                                     for (int z2 = 0; z2 < 3; z2++)
                                     {
-                                        //AllOperator.Add(new SecondStageOperator(new Position(w, x, y, z), new Position(w2, x2, y2, z2)));
-                                        //AllOperator.Add(new ThirdStageOperator(new Position(w, x, y, z), new Position(w2, x2, y2, z2)));
+                                        SecondStageOperators.Add(new SecondStageOperator(new Position(w, x, y, z), new Position(w2, x2, y2, z2)));
+                                        ThirdStageOperators.Add(new ThirdStageOperator(new Position(w, x, y, z), new Position(w2, x2, y2, z2)));
                                     }
                                 }
                             }

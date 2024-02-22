@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CubeTable : ATable
 {
@@ -16,10 +17,24 @@ public class CubeTable : ATable
                     for (int z = 0; z < Board.GetLength(3); z++)
                     {
                         //A mátrix középét nem használjuk!
-                        Board[w, x, y, z] = Stone.Empty;
+                        if ((x == 1 && y == 1) && (z == 0 || z == 1 || z == 2) ||
+                            (x == 0 && y == 1 && z == 1) ||
+                            (x == 1 && (y == 0 || y == 2) && z == 1) ||
+                            (x == 2 && y == 1 && z == 1))
+                            Board[w, x, y, z] = Stone.NotBelongToTable;
+                        else
+                            Board[w, x, y, z] = Stone.Empty;
                     }
                 }
             }
         }
+    }
+    public new object Clone()
+    {
+        CubeTable clonedTable = new CubeTable();
+
+        Array.Copy(Board, clonedTable.Board, Board.Length);
+
+        return clonedTable;
     }
 }

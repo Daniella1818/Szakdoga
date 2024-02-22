@@ -22,7 +22,7 @@ public abstract class AOperator
             (int)position.Z] == Stone.Empty;
     }
     //Adott pozícióra teszi az aktuális játékost
-    public void setStoneToPlace(State currentState, Position position)
+    public void setStoneToPlace (State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y, (int)position.Z] = currentState.CurrentPlayer;
     }
@@ -41,7 +41,20 @@ public abstract class AOperator
             currentState.CurrentStage = Stage.Remove;
             currentState.currentPlayersMills = currentState.CountMill(position, currentState.CurrentPlayer);
         }
+        else
+        {
+            currentState.ChangePlayer();
+        }
     }
+    public void checkIfStillRemoveStage(State currentState)
+    {
+        if(currentState.currentPlayersMills == 0)
+        {
+            currentState.CurrentStage = currentState.LastStage;
+            currentState.ChangePlayer();
+        }
+    }
+
     public int CountPlayersStones(State currentState, Stone playerColor)
     {
         int playerStones = 0;

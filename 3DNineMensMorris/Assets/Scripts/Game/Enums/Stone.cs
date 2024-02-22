@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum Stone 
 {
-    Red, Blue, Empty
+    Red, Blue, Empty, NotBelongToTable
 }

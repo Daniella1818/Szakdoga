@@ -66,13 +66,12 @@ public class TwoPlayersGame : AGame
     }
     IEnumerator PlayerTurn()
     {
-        while (!isPlayersTurn)
+        while (!isNextPlayerCanPlay)
         {
             yield return null;
         }
 
-        currentState.ChangePlayer();
-        isPlayersTurn = false;
+        isNextPlayerCanPlay = !isNextPlayerCanPlay;
         yield return null;
     }
 }

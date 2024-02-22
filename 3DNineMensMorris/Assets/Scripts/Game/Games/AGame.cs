@@ -4,10 +4,9 @@ using UnityEngine;
 
 public abstract class AGame : MonoBehaviour
 {
-    protected State currentState;
+    public State currentState;
     protected bool isPlaying = true;
-    protected int removeCount = 0;
-    protected bool isPlayersTurn = false;
+    protected bool isNextPlayerCanPlay = false;
     protected abstract IEnumerator Play();
     protected void ChangeColor(Color newColor, GameObject obj)
     {
@@ -115,24 +114,11 @@ public abstract class AGame : MonoBehaviour
             }
         }
     }
-    private void CheckIfTheStateIsStillRemove()
+    public void CheckIfTheStateIsStillRemove()
     {
+        //Ha nem vagyunk remove stage-be akkor az adott stage operátora elvégzi a játékos váltást!
         if (currentState.CurrentStage != Stage.Remove)
-            isPlayersTurn = true;
-        else
-        {
-            if (removeCount < currentState.currentPlayersMills)
-            {
-                removeCount++;
-            }
-            else
-            {
-                currentState.CurrentStage = currentState.LastStage;
-                removeCount = 0;
-                currentState.currentPlayersMills = 0;
-                isPlayersTurn = true;
-            }
-        }
+            isNextPlayerCanPlay = !isNextPlayerCanPlay;
     }
 
     //Két gép mód, egy gép és egy játékos mód
@@ -144,6 +130,7 @@ public abstract class AGame : MonoBehaviour
         {
             throw new System.Exception("Cannot select next move.");
         }
+
         return nextState;
     }
     protected void ColorTableAfterAIsMove(State currentState)
@@ -167,11 +154,15 @@ public abstract class AGame : MonoBehaviour
                         string name = w.ToString() + "," + x.ToString() + "," +
                                       y.ToString() + "," + z.ToString();
 
-                        GameObject gameObject = GameObject.Find(name);
-                        ChangeColor(color, gameObject);
+                        if (GameObject.Find(name) != null)
+                        {
+                            GameObject gameObject = GameObject.Find(name);
+                            ChangeColor(color, gameObject);
+                        }
                     }
                 }
             }
         }
     }
+
 }
