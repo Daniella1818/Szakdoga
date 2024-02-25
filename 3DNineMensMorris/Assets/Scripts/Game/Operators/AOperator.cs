@@ -74,4 +74,32 @@ public abstract class AOperator
         }
         return playerStones;
     }
+
+    public bool IsPlayerOnlyHaveStoneInMill(State currentState, Stone playerColor)
+    {
+        //Úgy vesszük, hogy igen, ha találunk egy olyan saját korongot ami nem malomban van akkor false-ra
+        //váltunk és visszatérünk vele
+        for (int w = 0; w < 3; w++)
+        {
+            for (int x = 0; x < 3; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int z = 0; z < 3; z++)
+                    {
+                        if (currentState.Table.Board[w, x, y, z] == playerColor)
+                        {
+                            Position position = new Position(w, x, y, z);
+                            //Ha az adott pozíción lévõ korong nem alkot malmot, akkor 0-val fog visszatérni, tehát ez
+                            //a korong nincs malomban
+                            if (currentState.CountMill(position, playerColor) == 0)
+                                return false;
+                        }
+                    }
+                }
+            }
+        }
+        //Ha végig megyünk akkor csak olyan korongja van ami malomban van
+        return true;
+    }
 }

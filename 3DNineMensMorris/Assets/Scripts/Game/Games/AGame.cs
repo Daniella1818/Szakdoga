@@ -6,7 +6,7 @@ public abstract class AGame : MonoBehaviour
 {
     public State currentState;
     protected bool isPlaying = true;
-    protected bool isNextPlayerCanPlay = false;
+    protected bool isNextPlayerCanPlay = true;
     protected abstract IEnumerator Play();
     protected void ChangeColor(Color newColor, GameObject obj)
     {
@@ -78,7 +78,7 @@ public abstract class AGame : MonoBehaviour
             {
                 ChangeColor(GetCurrentPlayerColor(currentState), clickedObj);
                 currentState = newState;
-                CheckIfTheStateIsStillRemove();
+                IsStateRemove();
             }
         }
     }
@@ -96,7 +96,7 @@ public abstract class AGame : MonoBehaviour
                 ChangeColor(Color.black, startPositionObj);
                 ChangeColor(GetCurrentPlayerColor(currentState), endPositionObj);
                 currentState = newState;
-                CheckIfTheStateIsStillRemove();
+                IsStateRemove();
             }
         }
     }
@@ -110,11 +110,11 @@ public abstract class AGame : MonoBehaviour
             {
                 ChangeColor(Color.black, removeObject);
                 currentState = newState;
-                CheckIfTheStateIsStillRemove();
+                IsStateRemove();
             }
         }
     }
-    public void CheckIfTheStateIsStillRemove()
+    public void IsStateRemove()
     {
         //Ha nem vagyunk remove stage-be akkor az adott stage operátora elvégzi a játékos váltást!
         if (currentState.CurrentStage != Stage.Remove)

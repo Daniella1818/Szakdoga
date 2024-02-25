@@ -40,8 +40,14 @@ public class RemoveStageOperator : AOperator
 
             if (stoneIsPlayers(currentState, enemy, Position))
             {
-                if(currentState.CountMill(Position, enemy) == 0)
+                //Ha csak malomban lévõ korongja van akkor, akkor levehet egy malomban lévõ korongot
+                if (IsPlayerOnlyHaveStoneInMill(currentState, enemy))
                     return true;
+                else
+                {
+                    if (currentState.CountMill(Position, enemy) == 0)
+                        return true;
+                }
             }
         }
 

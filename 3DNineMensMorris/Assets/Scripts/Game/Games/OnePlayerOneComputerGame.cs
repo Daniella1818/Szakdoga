@@ -71,7 +71,7 @@ public class OnePlayerOneComputerGame : AGame
     {
         currentState = AIsMove(solver);
         ColorTableAfterAIsMove(currentState);
-        CheckIfTheStateIsStillRemove();
+        IsStateRemove();
         yield return null;
     }
 

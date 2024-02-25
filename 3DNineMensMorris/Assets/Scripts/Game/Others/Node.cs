@@ -41,7 +41,7 @@ public class Node
         foreach (Node node in Children)
         {
             node.SortChildrenMinimax(currentPlayer, !isCurrentPlayer);
-            int he = node.State.GetHeuristics(currentPlayer);
+            int he = node.State.Heuristics.GetHeuristics(currentPlayer);
         }
         if (isCurrentPlayer) // ha a jelenlegi játékos lép (a gép), akkor csökkenõ sorrend
         {
@@ -57,7 +57,7 @@ public class Node
     {
         if (Children.Count == 0)
         {
-            return State.GetHeuristics(currentPlayer);
+            return State.Heuristics.GetHeuristics(currentPlayer);
         }
         return Children[0].GetHeuristics(currentPlayer);
     }
