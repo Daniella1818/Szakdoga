@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThirdStageOperator : AOperator
 {
-    Position startPosition, endPosition;
+    private Position startPosition, endPosition;
 
     public ThirdStageOperator(Position start, Position end)
     {
@@ -15,9 +15,9 @@ public class ThirdStageOperator : AOperator
     public override State Apply(State currentState)
     {
         State newState = (State)currentState.Clone();
-        setPlaceEmpty(newState, startPosition);
-        setStoneToPlace(newState, endPosition);
-        checkForRemoveStage(newState, endPosition);
+        SetPlaceEmpty(newState, startPosition);
+        SetStoneToPlace(newState, endPosition);
+        CheckForRemoveStage(newState, endPosition);
         return newState;
     }
 
@@ -26,8 +26,8 @@ public class ThirdStageOperator : AOperator
         //Ha a harmadik stage-ben vagyunk
         if (currentState.CurrentStage == Stage.Third)
         {
-            if (stoneIsPlayers(currentState, currentState.CurrentPlayer, startPosition))
-                return positionIsEmpty(currentState, endPosition);
+            if (StoneIsPlayers(currentState, currentState.CurrentPlayer, startPosition))
+                return PositionIsEmpty(currentState, endPosition);
         }
 
         return false;

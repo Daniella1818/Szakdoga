@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FirstStageOperator : AOperator
 {
-    public Position position;
+    private Position position;
     public FirstStageOperator(Position p)
     {
         position = p;
@@ -13,7 +13,7 @@ public class FirstStageOperator : AOperator
     public override State Apply(State currentState)
     {
         State newState = (State)currentState.Clone();
-        setStoneToPlace(newState, position);
+        SetStoneToPlace(newState, position);
 
         //Csökkentem a lerakható korongok számát
         if (currentState.CurrentPlayer == Stone.Red)
@@ -30,7 +30,7 @@ public class FirstStageOperator : AOperator
             newState.blueStoneCount = CountPlayersStones(newState, Stone.Blue);
         }
 
-        checkForRemoveStage(newState, position);
+        CheckForRemoveStage(newState, position);
         return newState;
     }
 
@@ -38,7 +38,7 @@ public class FirstStageOperator : AOperator
     {
         //Ha a first stage-ben vagyunk akkor lehet csak alakalmazva
         if (currentState.CurrentStage == Stage.First)
-            return positionIsEmpty(currentState, position);
+            return PositionIsEmpty(currentState, position);
 
         return false;
     }

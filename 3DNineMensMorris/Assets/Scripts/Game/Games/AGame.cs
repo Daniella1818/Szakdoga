@@ -8,7 +8,7 @@ public abstract class AGame : MonoBehaviour
     protected bool isPlaying = true;
     protected bool isNextPlayerCanPlay = true;
     protected abstract IEnumerator Play();
-    protected void ChangeColor(Color newColor, GameObject obj)
+    private void ChangeColor(Color newColor, GameObject obj)
     {
         Renderer rend = obj.GetComponent<Renderer>();
         if (rend != null)
@@ -20,7 +20,7 @@ public abstract class AGame : MonoBehaviour
             Debug.LogWarning("A GameObject nem rendelkezik Renderer komponenssel, így nem lehet megváltoztatni a színét.");
         }
     }
-    protected Color GetCurrentPlayerColor(State currentState)
+    private Color GetCurrentPlayerColor()
     {
         Color color;
         if (currentState.CurrentPlayer == Stone.Red)
@@ -53,7 +53,7 @@ public abstract class AGame : MonoBehaviour
         return null;
     }
     //Kattintás alapján kiolvassa a mátrix koordinátát a nevébõl
-    protected Position GetPositionOfGameObject(GameObject gameObject)
+    private Position GetPositionOfGameObject(GameObject gameObject)
     {
         if (gameObject != null && gameObject.name.Contains(','))
         {
@@ -76,7 +76,7 @@ public abstract class AGame : MonoBehaviour
             State newState = PlayersMove(p);
             if (newState != null)
             {
-                ChangeColor(GetCurrentPlayerColor(currentState), clickedObj);
+                ChangeColor(GetCurrentPlayerColor(), clickedObj);
                 currentState = newState;
                 IsStateRemove();
             }
@@ -94,7 +94,7 @@ public abstract class AGame : MonoBehaviour
             if (newState != null)
             {
                 ChangeColor(Color.black, startPositionObj);
-                ChangeColor(GetCurrentPlayerColor(currentState), endPositionObj);
+                ChangeColor(GetCurrentPlayerColor(), endPositionObj);
                 currentState = newState;
                 IsStateRemove();
             }

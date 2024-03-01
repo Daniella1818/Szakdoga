@@ -10,7 +10,7 @@ public class State : ICloneable
     public State()
     {
         Table = new CubeTable();
-        Heuristics = new DefensiveHeuristics(this);
+        Heuristics = new DefensiveHeuristics();
     }
 
     public Stone CurrentPlayer = Stone.Red;
@@ -118,7 +118,10 @@ public class State : ICloneable
         
         return mills;
     }
-
+    public int GetHeuristics(Stone player)
+    {
+        return Heuristics.GetHeuristics(this, player);
+    }
     public override bool Equals(object obj)
     {
         State other = obj as State;

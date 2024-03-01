@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class OffensiveHeuristics : AHeuristics
 {
-    public OffensiveHeuristics(State state)
-        : base(state) { }
+    public OffensiveHeuristics()
+    {
+    }
 
     protected new static int POSSIBLE_MILL = 11;
     protected new static int POSSIBLE_MILL_FOR_OTHER_PLAYER = 8;
@@ -13,7 +14,7 @@ public class OffensiveHeuristics : AHeuristics
     protected new static int CREATE_A_MILL = 10;
     protected new static int OTHER_PLAYER_CREATE_A_MILL = 7;
     protected new static int PROTECT_FROM_MILL = -2;
-    public override int GetHeuristics(Stone player)
+    public override int GetHeuristics(State state, Stone player)
     {
         if (currentState.GetStatus() == player)
             return WIN;
@@ -48,7 +49,7 @@ public class OffensiveHeuristics : AHeuristics
         else
             result -= otherPlayersStone - currentPlayersStone;
 
-        result += CountPotentialMillsAndNeighborCellCheck(currentPlayer, otherPlayer);
+        result += CountPotentialMills(currentPlayer, otherPlayer);
         return result;
     }
 }

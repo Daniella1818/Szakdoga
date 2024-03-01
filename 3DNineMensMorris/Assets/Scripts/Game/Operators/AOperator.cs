@@ -10,30 +10,31 @@ public abstract class AOperator
     public abstract State Apply(State currentState);
 
     //Meg vizsgálja hogy a paraméterben kapott játékosé-e a pozíción levõ kõ
-    public bool stoneIsPlayers(State currentState, Stone playersColor, Position position)
+    public bool StoneIsPlayers(State currentState, Stone playersColor, Position position)
     {
         return currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
                 (int)position.Z] == playersColor;
     }
     //Megvizsgálja, hogy a pozíció üres-e
-    public bool positionIsEmpty(State currentState, Position position)
+    public bool PositionIsEmpty(State currentState, Position position)
     {
         return currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
             (int)position.Z] == Stone.Empty;
     }
     //Adott pozícióra teszi az aktuális játékost
-    public void setStoneToPlace (State currentState, Position position)
+    public void SetStoneToPlace(State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y, (int)position.Z] = currentState.CurrentPlayer;
     }
     //Felszabadítja a pozíciót
-    public void setPlaceEmpty(State currentState, Position position)
+    public void SetPlaceEmpty(State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
            (int)position.Z] = Stone.Empty;
     }
-
-    public void checkForRemoveStage(State currentState, Position position)
+    
+    //Minden operátorban(First,Second,Third) meg kell vizsgálni, hogy remove-ban vagyunk-e
+    public void CheckForRemoveStage(State currentState, Position position)
     {
         if (currentState.CountMill(position, currentState.CurrentPlayer) > 0)
         {
@@ -46,7 +47,8 @@ public abstract class AOperator
             currentState.ChangePlayer();
         }
     }
-    public void checkIfStillRemoveStage(State currentState)
+    //Remove state esetén vizsgáljuk, hogy még abban vagyunk-e
+    public void CheckIfStillRemoveStage(State currentState)
     {
         if(currentState.currentPlayersMills == 0)
         {
@@ -75,6 +77,8 @@ public abstract class AOperator
         return playerStones;
     }
 
+    //Remove-hoz kell, mert csak olyan korongot távolíthat el ami nincs malomban, viszont, ha csak olyan korongja van ami
+    //malomban van akkor eltávolíthat egyet belõle. Ez azt vizsgálja, hogy van-e olyan korongja ami nem alkot malmot
     public bool IsPlayerOnlyHaveStoneInMill(State currentState, Stone playerColor)
     {
         //Úgy vesszük, hogy igen, ha találunk egy olyan saját korongot ami nem malomban van akkor false-ra

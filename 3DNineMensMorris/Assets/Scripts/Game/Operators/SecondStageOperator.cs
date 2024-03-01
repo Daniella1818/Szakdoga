@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SecondStageOperator : AOperator
 {
-    Position startPosition, endPosition;
+    private Position startPosition, endPosition;
     public SecondStageOperator(Position start, Position end)
     {
         this.startPosition = start;
@@ -15,9 +15,9 @@ public class SecondStageOperator : AOperator
     public override State Apply(State currentState)
     {
         State newState = (State)currentState.Clone();
-        setPlaceEmpty(newState, startPosition);
-        setStoneToPlace(newState, endPosition);
-        checkForRemoveStage(newState, endPosition);
+        SetPlaceEmpty(newState, startPosition);
+        SetStoneToPlace(newState, endPosition);
+        CheckForRemoveStage(newState, endPosition);
         return newState;
     }
 
@@ -27,8 +27,8 @@ public class SecondStageOperator : AOperator
         if (currentState.CurrentStage == Stage.Second)
         {
             //Ha a kiválasztott kõ az a sajátja-e, és ha a vég pozició üres
-            if (stoneIsPlayers(currentState, currentState.CurrentPlayer, startPosition)
-                && positionIsEmpty(currentState, endPosition))
+            if (StoneIsPlayers(currentState, currentState.CurrentPlayer, startPosition)
+                && PositionIsEmpty(currentState, endPosition))
             {
                 //Vízszintes mozgás, itt az oszlop változik a sor marad
                 //Vízszintes mozgás csak a 0 vagy 2 sorban lehet

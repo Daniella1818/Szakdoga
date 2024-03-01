@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RemoveStageOperator : AOperator
 {
-    Position Position;
+    private Position Position;
     public RemoveStageOperator(Position position)
     {
         Position = position;
@@ -24,7 +24,7 @@ public class RemoveStageOperator : AOperator
         }
 
         newState.currentPlayersMills--;
-        checkIfStillRemoveStage(newState);
+        CheckIfStillRemoveStage(newState);
         return newState;
     }
 
@@ -38,7 +38,7 @@ public class RemoveStageOperator : AOperator
             else if (currentState.CurrentPlayer == Stone.Blue)
                 enemy = Stone.Red;
 
-            if (stoneIsPlayers(currentState, enemy, Position))
+            if (StoneIsPlayers(currentState, enemy, Position))
             {
                 //Ha csak malomban lévõ korongja van akkor, akkor levehet egy malomban lévõ korongot
                 if (IsPlayerOnlyHaveStoneInMill(currentState, enemy))
