@@ -44,6 +44,7 @@ public abstract class AOperator
         }
         else
         {
+            SwitchBetweenSecondAndThridStage(currentState);
             currentState.ChangePlayer();
         }
     }
@@ -53,7 +54,27 @@ public abstract class AOperator
         if(currentState.currentPlayersMills == 0)
         {
             currentState.CurrentStage = currentState.LastStage;
+            SwitchBetweenSecondAndThridStage(currentState);
             currentState.ChangePlayer();
+        }
+    }
+
+    //Megvizsgálja hogy a másik játékosnak 3 db korongja van-e vagy sem, ha igen akkor a harmadik stage-be
+    //váltunk, egyébként a second stage marad, mivel a kettõ játékos nem mindig ugyanakkor van harmadik stage-ben!
+    public void SwitchBetweenSecondAndThridStage(State currentState)
+    {
+        if (currentState.CurrentStage == Stage.Second || currentState.CurrentStage == Stage.Third)
+        {
+            int stones = 0;
+            if (currentState.CurrentPlayer == Stone.Blue)
+                stones = currentState.redStoneCount;
+            else if (currentState.CurrentPlayer == Stone.Red)
+                stones = currentState.blueStoneCount;
+
+            if (stones == 3)
+                currentState.CurrentStage = Stage.Third;
+            else
+                currentState.CurrentStage = Stage.Second;
         }
     }
 

@@ -54,9 +54,9 @@ public class DefensiveHeuristics : AHeuristics
 
         //Nagyobb legyen a heurisztika, ha a jelenlegi játékosnak több bábuja van
         if (currentPlayersStone > otherPlayersStone)
-            result += currentPlayersStone - otherPlayersStone;
+            result += 1;
         else
-            result -= otherPlayersStone - currentPlayersStone;
+            result -= 1;
 
         result += CountPotentialMills(currentPlayer, otherPlayer);
 

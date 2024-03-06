@@ -188,19 +188,6 @@ public class State : ICloneable
 
     //Megvizsgálja hogy a currentPlayer-nek 3 db korongja van-e vagy sem, ha igen akkor a harmadik stage-be
     //váltunk, egyébként a second stage marad
-    public void checkForSecondOrThirdStage()
-    {
-        int stones = 0;
-        if (CurrentPlayer == Stone.Blue)
-            stones = blueStoneCount;
-        else if(CurrentPlayer == Stone.Red)
-            stones = redStoneCount;
-
-        if (stones == 3)
-            CurrentStage = Stage.Third;
-        else
-            CurrentStage = Stage.Second;
-    }
     
     private bool isCurrentPlayersHaveMovableStone()
     {

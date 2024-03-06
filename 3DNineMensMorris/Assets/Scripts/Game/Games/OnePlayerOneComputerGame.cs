@@ -48,7 +48,6 @@ public class OnePlayerOneComputerGame : AGame
                         else
                         {
                             secondGameObject = hit.collider.gameObject;
-                            currentState.checkForSecondOrThirdStage();
                             SecondOrThirdStageStep(firstGameObject, secondGameObject);
                             isFirstClick = false;
                         }

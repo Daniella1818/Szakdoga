@@ -44,7 +44,6 @@ public class TwoPlayersGame : AGame
                         else
                         {
                             secondGameObject = hit.collider.gameObject;
-                            currentState.checkForSecondOrThirdStage();
                             SecondOrThirdStageStep(firstGameObject, secondGameObject);
                             isFirstClick = false;
                         }
