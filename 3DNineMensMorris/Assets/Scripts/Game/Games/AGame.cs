@@ -130,18 +130,17 @@ public abstract class AGame : MonoBehaviour
         {
             throw new System.Exception("Cannot select next move.");
         }
-
         return nextState;
     }
     protected void ColorTableAfterAIsMove(State currentState)
     {
-        for (int w = 0; w < 3; w++)
+        for (int w = 0; w < currentState.Table.Board.GetLength(0); w++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < currentState.Table.Board.GetLength(1); x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < currentState.Table.Board.GetLength(2); y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < currentState.Table.Board.GetLength(3); z++)
                     {
                         Color color;
                         if (currentState.Table.Board[w, x, y, z] == Stone.Red)
@@ -164,5 +163,4 @@ public abstract class AGame : MonoBehaviour
             }
         }
     }
-
 }

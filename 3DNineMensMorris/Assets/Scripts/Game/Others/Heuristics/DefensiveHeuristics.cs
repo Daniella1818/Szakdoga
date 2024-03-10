@@ -11,16 +11,9 @@ public class DefensiveHeuristics : AHeuristics
         CREATE_A_MILL = 8;
         OTHER_PLAYER_CREATE_A_MILL = 11;
         PROTECT_FROM_MILL = 2;
-        OTHER_PLAYER_MOVEABILITY = 2;
+        OTHER_PLAYER_MOVEABILITY = 3;
         MOVEABILITY = 2;
     }
-
-    //protected new int POSSIBLE_MILL = 8;
-    //protected new int POSSIBLE_MILL_FOR_OTHER_PLAYER = 11;
-    ////Ez akkor amikor az ellenfélnek már az adott helyen a 2 korongja van a jelenlegi játékosnak 0 korongja 
-    //protected new int CREATE_A_MILL = 7;
-    //protected new int OTHER_PLAYER_CREATE_A_MILL = 10;
-    //protected new int PROTECT_FROM_MILL = 2;
     public override int GetHeuristics(State state, Stone player)
     {
         currentState = state;

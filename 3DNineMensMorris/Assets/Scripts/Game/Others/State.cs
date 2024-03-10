@@ -30,6 +30,13 @@ public class State : ICloneable
         else if (CurrentPlayer == Stone.Blue)
             CurrentPlayer = Stone.Red;
     }
+    public void ChangeHeuristics()
+    {
+        if (Heuristics is DefensiveHeuristics)
+            Heuristics = new OffensiveHeuristics();
+        else if(Heuristics is OffensiveHeuristics)
+            Heuristics = new DefensiveHeuristics();
+    }
 
     //Megvizsgálja, hogy van e nyertes, akkor veszít valaki ha 2 korongja maradt összesen, ha EMPTY-t ad vissza akkor még tudnak 
     //lépni a játékosok.
@@ -156,6 +163,7 @@ public class State : ICloneable
         newState.LastStage = LastStage;
         newState.currentPlayersMills = currentPlayersMills;
         newState.CurrentPlayer = CurrentPlayer;
+        newState.Heuristics = Heuristics;
         newState.Table = (CubeTable)Table.Clone();
         newState.redStoneCount = redStoneCount;
         newState.blueStoneCount = blueStoneCount;

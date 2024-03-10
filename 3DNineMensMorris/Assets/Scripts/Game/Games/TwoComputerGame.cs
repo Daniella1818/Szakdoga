@@ -9,28 +9,25 @@ public class TwoComputerGame : AGame
     void Start()
     {
         currentState = new State();
-        solver = new MiniMaxSolver(2);
-        Playe();
+        solver = new MiniMaxSolver(3);
+        StartCoroutine(Play());
     }
-
-    // Update is called once per frame
-    protected void Playe()
-    {
-        while (currentState.GetStatus() == Stone.Empty)
-        {
-            AIsTurn();
-        }
-        Stone status = currentState.GetStatus();
-        Debug.Log("Winner: " + status);
-    }
-    private void AIsTurn()
+    IEnumerator AIsTurn()
     {
         currentState = AIsMove(solver);
+        currentState.ChangeHeuristics();
         ColorTableAfterAIsMove(currentState);
+        yield return null;
     }
 
     protected override IEnumerator Play()
     {
-        throw new System.NotImplementedException();
+        while (currentState.GetStatus() == Stone.Empty)
+        {
+            yield return StartCoroutine(AIsTurn());
+        }
+
+        Stone status = currentState.GetStatus();
+        Debug.Log("Winner: " + status);
     }
 }
