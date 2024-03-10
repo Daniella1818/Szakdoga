@@ -127,13 +127,13 @@ public abstract class AHeuristics
     public int CountPlayerMoveableStones(Stone player)
     {
         int moveableStone = 0;
-        for (int w = 0; w < 3; w++)
+        for (int w = 0; w < currentState.Table.Board.GetLength(0); w++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < currentState.Table.Board.GetLength(1); x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < currentState.Table.Board.GetLength(2); y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < currentState.Table.Board.GetLength(3); z++)
                     {
                         if (currentState.Table.Board[w, x, y, z] == player)
                         {
@@ -250,9 +250,5 @@ public abstract class AHeuristics
             playersCount++;
 
         return playersCount;
-    }
-    private bool IsNeigborPlaceIsStone(int w, int x, int y, int z, Stone stone)
-    {
-        return currentState.Table.Board[w, x, y, z] == stone;
     }
 }

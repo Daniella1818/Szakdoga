@@ -201,13 +201,13 @@ public class State : ICloneable
     {
         bool canMove = true;
         //Ha találok egy olyan korongot amit tud bármerre mozgatni akkor tud mozogni a játékos
-        for (int w = 0; w < 3; w++)
+        for (int w = 0; w < Table.Board.GetLength(0); w++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < Table.Board.GetLength(1); x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < Table.Board.GetLength(2); y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < Table.Board.GetLength(3); z++)
                     {
                         if(Table.Board[w, x, y, z] == CurrentPlayer)
                         {

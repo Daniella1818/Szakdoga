@@ -33,7 +33,7 @@ public abstract class AOperator
            (int)position.Z] = Stone.Empty;
     }
     
-    //Minden operátorban(First,Second,Third) meg kell vizsgálni, hogy remove-ban vagyunk-e
+    //Minden operátorban(First,Second,Third) meg kell vizsgálni, hogy remove-be kell átváltani
     public void CheckForRemoveStage(State currentState, Position position)
     {
         if (currentState.CountMill(position, currentState.CurrentPlayer) > 0)
@@ -81,13 +81,13 @@ public abstract class AOperator
     public int CountPlayersStones(State currentState, Stone playerColor)
     {
         int playerStones = 0;
-        for (int w = 0; w < 3; w++)
+        for (int w = 0; w < currentState.Table.Board.GetLength(0); w++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < currentState.Table.Board.GetLength(1); x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < currentState.Table.Board.GetLength(2); y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < currentState.Table.Board.GetLength(3); z++)
                     {
                         if (currentState.Table.Board[w, x, y, z] == playerColor)
                             playerStones++;
@@ -104,13 +104,13 @@ public abstract class AOperator
     {
         //Úgy vesszük, hogy igen, ha találunk egy olyan saját korongot ami nem malomban van akkor false-ra
         //váltunk és visszatérünk vele
-        for (int w = 0; w < 3; w++)
+        for (int w = 0; w < currentState.Table.Board.GetLength(0); w++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < currentState.Table.Board.GetLength(1); x++)
             {
-                for (int y = 0; y < 3; y++)
+                for (int y = 0; y < currentState.Table.Board.GetLength(2); y++)
                 {
-                    for (int z = 0; z < 3; z++)
+                    for (int z = 0; z < currentState.Table.Board.GetLength(3); z++)
                     {
                         if (currentState.Table.Board[w, x, y, z] == playerColor)
                         {
