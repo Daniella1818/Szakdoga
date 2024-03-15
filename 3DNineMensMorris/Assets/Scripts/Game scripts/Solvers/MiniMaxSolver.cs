@@ -14,12 +14,12 @@ public class MiniMaxSolver : ASolver
     public override State NextMove(State currentState)
     {
         Node currentNode = new Node(currentState);
-        int bestValue = extendNode(currentNode, int.MinValue, int.MaxValue, true);
+        int bestValue = Minimax(currentNode, int.MinValue, int.MaxValue, true);
 
         Node bestChild = null;
         foreach (Node child in currentNode.Children)
         {
-            int childValue = extendNode(child, int.MinValue, int.MaxValue, false);
+            int childValue = Minimax(child, int.MinValue, int.MaxValue, false);
             if (childValue == bestValue)
             {
                 bestChild = child;
@@ -30,7 +30,7 @@ public class MiniMaxSolver : ASolver
         return bestChild != null ? bestChild.State : null;
     }
 
-    private int extendNode(Node node, int alpha, int beta, bool maximizingPlayer)
+    private int Minimax(Node node, int alpha, int beta, bool maximizingPlayer)
     {
         if (node.GetStatus() != Stone.Empty || node.Depth >= Depth) 
             return node.GetHeuristics(node.State.CurrentPlayer);
@@ -41,7 +41,7 @@ public class MiniMaxSolver : ASolver
             int maxEval = int.MinValue;
             foreach (Node child in node.Children)
             {
-                int eval = extendNode(child, alpha, beta, false);
+                int eval = Minimax(child, alpha, beta, false);
                 maxEval = Mathf.Max(eval, maxEval);
                 alpha = Mathf.Max(alpha, maxEval);
                 if (beta <= alpha)
@@ -54,7 +54,7 @@ public class MiniMaxSolver : ASolver
             int minEval = int.MaxValue;
             foreach (Node child in node.Children)
             {
-                int eval = extendNode(child, alpha, beta, true);
+                int eval = Minimax(child, alpha, beta, true);
                 minEval = Mathf.Min(eval, minEval);
                 beta = Mathf.Min(beta, minEval);
                 if (beta <= alpha)

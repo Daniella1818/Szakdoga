@@ -9,18 +9,20 @@ public abstract class AHeuristics
     {
     }
 
-    protected int WIN = 100;
-    protected int LOSE = -100;
+    protected static int WIN = 100;
+    protected static int LOSE = -100;
     //Ez akkor amikor az ellenfélnek az adott helyen 2 korongja van és a jelenlegi játékos odateszi a korongját,
     //hogy ne legyen malma az ellenfélnek
-    protected int POSSIBLE_MILL;
-    protected int POSSIBLE_MILL_FOR_OTHER_PLAYER;
+    protected static int POSSIBLE_MILL;
+    protected static int POSSIBLE_MILL_FOR_OTHER_PLAYER;
     //Ez akkor amikor az ellenfélnek már az adott helyen a 2 korongja van a jelenlegi játékosnak 0 korongja 
-    protected int CREATE_A_MILL;
-    protected int OTHER_PLAYER_CREATE_A_MILL;
-    protected int PROTECT_FROM_MILL;
-    protected int OTHER_PLAYER_MOVEABILITY;
-    protected int MOVEABILITY;
+    protected static int CREATE_A_MILL;
+    protected static int OTHER_PLAYER_CREATE_A_MILL;
+    protected static int PROTECT_FROM_MILL;
+    protected static int OTHER_PLAYER_MOVEABILITY;
+    protected static int MOVEABILITY;
+    protected static int PLAYERS_STONES;
+    protected static int OTHER_PLAYERS_STONES;
     public abstract int GetHeuristics(State currentState, Stone player);
     private int CalculateHeuristics(int playerCount, int otherPlayerCount)
     {

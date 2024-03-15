@@ -42,13 +42,13 @@ public class State : ICloneable
     //lépni a játékosok.
     public Stone GetStatus()
     {
-        if (CurrentStage == Stage.Second || CurrentStage == Stage.Third)
+        if (CurrentStage != Stage.First && CurrentStage != Stage.Remove)
         {
             //Azt is meg kellene vizsgálni, hogy a jelenlegi játékos tud-e lépni, de csak a második stage-tõl
             //Meg kellene nézni az összes saját korongját, és mellette lévõ helyeket, ha legalább egy olyan korongja van
             //ami mellett üres a hely akkor tud lépni egyébként nem
             //Ha nem tud lépni akkor az ellenfelet adjuk vissza nyeretesként
-            if (isCurrentPlayersHaveMovableStone() == false)
+            if (CurrentStage != Stage.Third && isCurrentPlayersHaveMovableStone() == false)
             {
                 if (CurrentPlayer == Stone.Red)
                     return Stone.Blue;

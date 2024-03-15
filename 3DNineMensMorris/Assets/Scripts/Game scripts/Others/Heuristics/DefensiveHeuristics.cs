@@ -13,6 +13,8 @@ public class DefensiveHeuristics : AHeuristics
         PROTECT_FROM_MILL = 2;
         OTHER_PLAYER_MOVEABILITY = 3;
         MOVEABILITY = 2;
+        PLAYERS_STONES = 1;
+        OTHER_PLAYERS_STONES = 2;
     }
     public override int GetHeuristics(State state, Stone player)
     {
@@ -44,19 +46,19 @@ public class DefensiveHeuristics : AHeuristics
             otherPlayer = Stone.Red;
             otherPlayersStone = currentState.redStoneCount;
         }
-
-        //Nagyobb legyen a heurisztika, ha a jelenlegi játékosnak több bábuja van
-        if (currentPlayersStone > otherPlayersStone)
-            result += 1;
-        else
-            result -= 1;
-
+        
         result += CountPotentialMills(currentPlayer, otherPlayer);
+        result += MoveabilityOfStones(currentPlayer) * MOVEABILITY;
+        result -= MoveabilityOfStones(otherPlayer) * OTHER_PLAYER_MOVEABILITY;
 
-        if (currentState.CurrentStage == Stage.Second)
+        if (currentState.CurrentStage != Stage.First)
         {
             result += MoveabilityOfStones(currentPlayer) * MOVEABILITY;
             result -= MoveabilityOfStones(otherPlayer) * OTHER_PLAYER_MOVEABILITY;
+            if (currentPlayersStone > otherPlayersStone)
+                result += PLAYERS_STONES;
+            else
+                result -= OTHER_PLAYERS_STONES;
         }
 
         return result;
