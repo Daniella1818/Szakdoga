@@ -25,40 +25,20 @@ public class OffensiveHeuristics : AHeuristics
             return LOSE;
 
         int result = 0;
-        Stone currentPlayer;
-
-        int currentPlayersStone;
-        Stone otherPlayer;
-        int otherPlayersStone;
-
-        if (player == Stone.Red)
-        {
-            currentPlayer = Stone.Red;
-            currentPlayersStone = currentState.redStoneCount;
-            otherPlayer = Stone.Blue;
-            otherPlayersStone = currentState.blueStoneCount;
-        }
-        else
-        {
-            currentPlayer = Stone.Blue;
-            currentPlayersStone = currentState.blueStoneCount;
-            otherPlayer = Stone.Red;
-            otherPlayersStone = currentState.redStoneCount;
-        }
-
-        //Nagyobb legyen a heurisztika, ha a jelenlegi játékosnak több bábuja van
-        if (currentPlayersStone > otherPlayersStone)
-            result += 1;
-        else
-            result -= 1;
-
-        result += CountPotentialMills(currentPlayer, otherPlayer);
+        UpdatePlayersStatus(player);
 
         if (currentState.CurrentStage == Stage.Second)
         {
-            result += MoveabilityOfStones(currentPlayer) * MOVEABILITY;
-            result -= MoveabilityOfStones(otherPlayer) * OTHER_PLAYER_MOVEABILITY;
+            result += CountPlayerMoveableStones(currentPlayer) * MOVEABILITY;
+            result -= CountPlayerMoveableStones(otherPlayer) * OTHER_PLAYER_MOVEABILITY; 
         }
+        else if (currentState.CurrentStage == Stage.Third)
+        {
+            CREATE_A_MILL = CREATE_A_MILL * 2;
+            POSSIBLE_MILL = POSSIBLE_MILL * 2;
+        }
+
+        result += CountPotentialMills(currentPlayer, otherPlayer);
 
         return result;
     }

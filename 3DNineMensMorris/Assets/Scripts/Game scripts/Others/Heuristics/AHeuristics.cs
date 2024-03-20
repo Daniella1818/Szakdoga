@@ -5,9 +5,6 @@ using UnityEngine;
 public abstract class AHeuristics
 {
     protected State currentState;
-    public AHeuristics()
-    {
-    }
 
     protected static int WIN = 100;
     protected static int LOSE = -100;
@@ -23,24 +20,48 @@ public abstract class AHeuristics
     protected static int MOVEABILITY;
     protected static int PLAYERS_STONES;
     protected static int OTHER_PLAYERS_STONES;
+
+    protected Stone currentPlayer;
+    protected int currentPlayersStone;
+    protected Stone otherPlayer;
+    protected int otherPlayersStone;
+
+    protected void UpdatePlayersStatus(Stone player) 
+    {
+        if (player == Stone.Red)
+        {
+            currentPlayer = Stone.Red;
+            currentPlayersStone = currentState.redStoneCount;
+            otherPlayer = Stone.Blue;
+            otherPlayersStone = currentState.blueStoneCount;
+        }
+        else
+        {
+            currentPlayer = Stone.Blue;
+            currentPlayersStone = currentState.blueStoneCount;
+            otherPlayer = Stone.Red;
+            otherPlayersStone = currentState.redStoneCount;
+        }
+    }
+
     public abstract int GetHeuristics(State currentState, Stone player);
     private int CalculateHeuristics(int playerCount, int otherPlayerCount)
     {
         int score = 0;
 
         if (playerCount == 2 && otherPlayerCount != 1)
-            score = score + POSSIBLE_MILL;
+            score += POSSIBLE_MILL;
         else if (playerCount == 3)
-            score = score + CREATE_A_MILL;
+            score += CREATE_A_MILL;
         //Másik játékosnak lehetséges malom
         else if (otherPlayerCount == 2 && playerCount != 1)
-            score = score - POSSIBLE_MILL_FOR_OTHER_PLAYER;
+            score -= POSSIBLE_MILL_FOR_OTHER_PLAYER;
         //Másik játékosnak malom alakult ki
         else if (otherPlayerCount == 3)
-            score = score - OTHER_PLAYER_CREATE_A_MILL;
+            score -= OTHER_PLAYER_CREATE_A_MILL;
         //Ez lehet pozitív és negatív is, attól függ, hogy milyen heurisztika
         else if (playerCount == 1 && otherPlayerCount == 1)
-            score = score + PROTECT_FROM_MILL;
+            score += PROTECT_FROM_MILL;
 
         return score;
     }
@@ -120,13 +141,9 @@ public abstract class AHeuristics
 
         return score;
     }
-    //Megnézi a játékos korongjainak mozgathatóságát
-    protected int MoveabilityOfStones(Stone player)
-    {
-        return CountPlayerMoveableStones(player);
-    }
 
-    public int CountPlayerMoveableStones(Stone player)
+    //Megnézi a játékos korongjainak mozgathatóságát
+    protected int CountPlayerMoveableStones(Stone player)
     {
         int moveableStone = 0;
         for (int w = 0; w < currentState.Table.Board.GetLength(0); w++)
@@ -159,43 +176,44 @@ public abstract class AHeuristics
                             //Ha középen van, kettõt mellette, és egyet/kettõt a kövi szinten
                             if (x == 1)
                             {
-                                if (currentState.Table.Board[w, 0, y, z] == Stone.Empty)
-                                    moveableStone++;
-                                if (currentState.Table.Board[w, 2, y, z] == Stone.Empty)
-                                    moveableStone++;
+                                for (int i = 0; i < currentState.Table.Board.GetLength(1); i+=2)
+                                {
+                                    if (currentState.Table.Board[w, i, y, z] == Stone.Empty)
+                                        moveableStone++;
+                                }
                             }
                             else if (y == 1)
                             {
-                                if (currentState.Table.Board[w, x, 0, z] == Stone.Empty)
-                                    moveableStone++;
-                                if (currentState.Table.Board[w, x, 2, z] == Stone.Empty)
-                                    moveableStone++;
+                                for (int i = 0; i < currentState.Table.Board.GetLength(2); i+=2)
+                                {
+                                    if (currentState.Table.Board[w, x, i, z] == Stone.Empty)
+                                        moveableStone++;
+                                }
 
                             }
                             else if (z == 1)
                             {
-                                if (currentState.Table.Board[w, x, y, 0] == Stone.Empty)
-                                    moveableStone++;
-                                if (currentState.Table.Board[w, x, y, 2] == Stone.Empty)
-                                    moveableStone++;
+                                for (int i = 0; i < currentState.Table.Board.GetLength(3); i+=2)
+                                {
+                                    if (currentState.Table.Board[w, x, y, i] == Stone.Empty)
+                                        moveableStone++;
+                                }
                             }
 
                             if (x == 1 || y == 1 || z == 1)
                             {
-                                //Ha a nulladik szinten vagyunk 
-                                if (w == 0 && currentState.Table.Board[1, x, y, z] == Stone.Empty)
+                                //Ha a nulladik vagy második szinten vagyunk, akkor a középsõ szintet kell megnézni
+                                if ((w == 0 || w == 2) && currentState.Table.Board[1, x, y, z] == Stone.Empty)
                                     moveableStone++;
                                 //Ha az elsõ szinten vagyunk
                                 else if (w == 1)
                                 {
-                                    if (currentState.Table.Board[0, x, y, z] == Stone.Empty)
-                                        moveableStone++;
-                                    if (currentState.Table.Board[2, x, y, z] == Stone.Empty)
-                                        moveableStone++;
+                                    for (int i = 0; i < currentState.Table.Board.GetLength(0); i++)
+                                    {
+                                        if (currentState.Table.Board[i, x, y, z] == Stone.Empty)
+                                            moveableStone++;
+                                    }
                                 }
-                                //Ha a második szinten vagyunk
-                                else if (w == 2 && currentState.Table.Board[1, x, y, z] == Stone.Empty)
-                                    moveableStone++;
                             }
                         }
                     }
