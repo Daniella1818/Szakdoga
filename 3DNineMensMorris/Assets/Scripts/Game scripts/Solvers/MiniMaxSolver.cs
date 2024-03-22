@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MiniMaxSolver : ASolver
 {
+    private bool ShouldGenerateChildren;
     public MiniMaxSolver(int depth) : base()
     {
         Depth = depth;
@@ -13,10 +14,12 @@ public class MiniMaxSolver : ASolver
 
     public override State NextMove(State currentState)
     {
+        ShouldGenerateChildren = true;
         Node currentNode = new Node(currentState);
         int bestValue = Minimax(currentNode, int.MinValue, int.MaxValue, true);
 
         Node bestChild = null;
+        ShouldGenerateChildren = false;
         foreach (Node child in currentNode.Children)
         {
             int childValue = Minimax(child, int.MinValue, int.MaxValue, false);
@@ -35,7 +38,9 @@ public class MiniMaxSolver : ASolver
         if (node.GetStatus() != Stone.Empty || node.Depth >= Depth) 
             return node.GetHeuristics(node.State.CurrentPlayer);
 
-        GenerateChildrenForNode(node);
+        if(ShouldGenerateChildren)
+            GenerateChildrenForNode(node);
+
         if (maximizingPlayer)
         {
             int maxEval = int.MinValue;

@@ -63,6 +63,7 @@ public class OnePlayerOneComputerGame : AGame
         {
             yield return null;
         }
+        ChangeColorBasedOnPlayer();
         yield return null;
     }
 
@@ -71,6 +72,7 @@ public class OnePlayerOneComputerGame : AGame
         currentState = AIsMove(solver);
         ColorTableAfterAIsMove(currentState);
         IsStateRemove();
+        ChangeColorBasedOnPlayer();
         yield return null;
     }
 

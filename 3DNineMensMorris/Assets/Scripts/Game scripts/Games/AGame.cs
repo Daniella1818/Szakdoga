@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class AGame : MonoBehaviour
 {
     public State currentState;
     protected bool isPlaying = true;
     protected bool isNextPlayerCanPlay = true;
+
     protected abstract IEnumerator Play();
     private void ChangeColor(Color newColor, GameObject obj)
     {
@@ -161,6 +163,17 @@ public abstract class AGame : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    protected void ChangeColorBasedOnPlayer()
+    {
+        GameObject colorObj = GameObject.Find("CurrentPlayer");
+        if (colorObj != null)
+        {
+            RawImage colorView = colorObj.GetComponent<RawImage>();
+            Color color = GetCurrentPlayerColor();
+            colorView.color = color;
         }
     }
 }

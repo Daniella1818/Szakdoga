@@ -17,6 +17,7 @@ public class TwoComputerGame : AGame
         currentState = AIsMove(solver);
         currentState.ChangeHeuristics();
         ColorTableAfterAIsMove(currentState);
+        ChangeColorBasedOnPlayer();
         yield return null;
     }
 

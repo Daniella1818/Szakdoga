@@ -71,6 +71,7 @@ public class TwoPlayersGame : AGame
         }
 
         isNextPlayerCanPlay = !isNextPlayerCanPlay;
+        ChangeColorBasedOnPlayer();
         yield return null;
     }
 }

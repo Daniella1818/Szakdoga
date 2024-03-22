@@ -6,6 +6,12 @@ public class DefensiveHeuristics : AHeuristics
 {
     public DefensiveHeuristics()
     {
+        SetStaticValues();
+    }
+    private int VALUE_FOR_THIRD_STAGE = 15;
+
+    public void SetStaticValues()
+    {
         POSSIBLE_MILL = 7;
         POSSIBLE_MILL_FOR_OTHER_PLAYER = 10;
         CREATE_A_MILL = 8;
@@ -16,6 +22,7 @@ public class DefensiveHeuristics : AHeuristics
         PLAYERS_STONES = 1;
         OTHER_PLAYERS_STONES = 2;
     }
+
     public override int GetHeuristics(State state, Stone player)
     {
         currentState = state;
@@ -39,12 +46,11 @@ public class DefensiveHeuristics : AHeuristics
         }
         else if(currentState.CurrentStage == Stage.Third)
         {
-            CREATE_A_MILL = CREATE_A_MILL * 2;
-            POSSIBLE_MILL = POSSIBLE_MILL * 2;
+            CREATE_A_MILL += VALUE_FOR_THIRD_STAGE;
         }
 
         result += CountPotentialMills(currentPlayer, otherPlayer);
-
+        SetStaticValues();
         return result;
     }
 }
