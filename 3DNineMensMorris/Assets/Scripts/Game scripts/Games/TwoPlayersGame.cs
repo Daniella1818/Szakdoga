@@ -31,6 +31,7 @@ public class TwoPlayersGame : AGame, IPlayerGame
         while (currentState.GetStatus() == Stone.Empty)
         {
             yield return StartCoroutine(PlayerTurn());
+            ChangeColorBasedOnPlayer();
         }
         isPlaying = false;
 
@@ -44,8 +45,6 @@ public class TwoPlayersGame : AGame, IPlayerGame
         {
             yield return null;
         }
-
-        ChangeColorBasedOnPlayer();
         yield return null;
     }
 }
