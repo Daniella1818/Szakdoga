@@ -44,7 +44,6 @@ public class OnePlayerOneComputerGame : AGame, IPlayerGame, IComputerGame
         Stone status = currentState.GetStatus();
         Debug.Log("Winner: " + status);
     }
-
     public IEnumerator PlayerTurn()
     {
         while (isNextPlayerCanPlay)

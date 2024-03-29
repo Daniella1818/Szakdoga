@@ -17,15 +17,10 @@ public abstract class AGame : MonoBehaviour
 
     protected void ClickWatcher(RaycastHit hit)
     {
-        if (currentState.CurrentStage == Stage.First)
+        if (currentState.CurrentStage == Stage.First || currentState.CurrentStage == Stage.Remove)
         {
             firstGameObject = hit.collider.gameObject;
-            FirstStageStep(firstGameObject);
-        }
-        else if (currentState.CurrentStage == Stage.Remove)
-        {
-            firstGameObject = hit.collider.gameObject;
-            RemoveStageStep(firstGameObject);
+            FirstOrRemoveStageStep(firstGameObject);
         }
         else if (currentState.CurrentStage == Stage.Second ||
                  currentState.CurrentStage == Stage.Third)
@@ -104,7 +99,7 @@ public abstract class AGame : MonoBehaviour
     }
 
     //Itt egy kattintás után váltunk
-    protected void FirstStageStep(GameObject clickedObj)
+    protected void FirstOrRemoveStageStep(GameObject clickedObj)
     {
         Position p = GetPositionOfGameObject(clickedObj);
         //Ezzel biztosítjuk, hogy ha rosszul kattint, akkor ne csináljon semmit
@@ -113,7 +108,10 @@ public abstract class AGame : MonoBehaviour
             State newState = PlayersMove(p);
             if (newState != null)
             {
-                ChangeColor(GetCurrentPlayerColor(), clickedObj);
+                if(currentState.CurrentStage == Stage.First)
+                    ChangeColor(GetCurrentPlayerColor(), clickedObj);
+                else
+                    ChangeColor(Color.black, clickedObj);
                 currentState = newState;
                 IsStateRemove();
             }
@@ -132,20 +130,6 @@ public abstract class AGame : MonoBehaviour
             {
                 ChangeColor(Color.black, startPositionObj);
                 ChangeColor(GetCurrentPlayerColor(), endPositionObj);
-                currentState = newState;
-                IsStateRemove();
-            }
-        }
-    }
-    protected void RemoveStageStep(GameObject removeObject)
-    {
-        Position p = GetPositionOfGameObject(removeObject);
-        if (p != null)
-        {
-            State newState = PlayersMove(p);
-            if (newState != null)
-            {
-                ChangeColor(Color.black, removeObject);
                 currentState = newState;
                 IsStateRemove();
             }

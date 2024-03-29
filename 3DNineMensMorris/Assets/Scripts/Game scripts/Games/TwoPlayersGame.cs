@@ -45,7 +45,6 @@ public class TwoPlayersGame : AGame, IPlayerGame
             yield return null;
         }
 
-        isNextPlayerCanPlay = !isNextPlayerCanPlay;
         ChangeColorBasedOnPlayer();
         yield return null;
     }
