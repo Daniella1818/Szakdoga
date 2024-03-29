@@ -18,12 +18,12 @@ public class RemoveStageOperator : AOperator
         if (currentState.LastStage != Stage.First)
         {
             if (currentState.CurrentPlayer == Stone.Red)
-                newState.blueStoneCount--;
+                newState.BlueStoneCount--;
             else if (currentState.CurrentPlayer == Stone.Blue)
-                newState.redStoneCount--;
+                newState.RedStoneCount--;
         }
 
-        newState.currentPlayersMills--;
+        newState.CurrentPlayersMills--;
         CheckIfStillRemoveStage(newState);
         return newState;
     }

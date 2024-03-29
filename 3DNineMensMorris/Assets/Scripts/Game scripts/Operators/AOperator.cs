@@ -40,7 +40,7 @@ public abstract class AOperator
         {
             currentState.LastStage = currentState.CurrentStage;
             currentState.CurrentStage = Stage.Remove;
-            currentState.currentPlayersMills = currentState.CountMill(position, currentState.CurrentPlayer);
+            currentState.CurrentPlayersMills = currentState.CountMill(position, currentState.CurrentPlayer);
         }
         else
         {
@@ -51,7 +51,7 @@ public abstract class AOperator
     //Remove state esetén vizsgáljuk, hogy még abban vagyunk-e
     public void CheckIfStillRemoveStage(State currentState)
     {
-        if(currentState.currentPlayersMills == 0)
+        if(currentState.CurrentPlayersMills == 0)
         {
             currentState.CurrentStage = currentState.LastStage;
             SwitchBetweenSecondAndThridStage(currentState);
@@ -67,9 +67,9 @@ public abstract class AOperator
         {
             int stones = 0;
             if (currentState.CurrentPlayer == Stone.Blue)
-                stones = currentState.redStoneCount;
+                stones = currentState.RedStoneCount;
             else if (currentState.CurrentPlayer == Stone.Red)
-                stones = currentState.blueStoneCount;
+                stones = currentState.BlueStoneCount;
 
             if (stones == 3)
                 currentState.CurrentStage = Stage.Third;

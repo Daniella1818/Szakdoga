@@ -11,9 +11,9 @@ public abstract class ASolver
 
     public ASolver()
     {
-        generateOperators();
+        GenerateOperators();
     }
-    private void generateOperators()
+    private void GenerateOperators()
     {
         for (int w = 0; w < 3; w++)
         {

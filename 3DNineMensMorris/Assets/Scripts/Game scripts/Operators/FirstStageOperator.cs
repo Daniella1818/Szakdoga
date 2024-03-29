@@ -17,17 +17,17 @@ public class FirstStageOperator : AOperator
 
         //Csökkentem a lerakható korongok számát
         if (currentState.CurrentPlayer == Stone.Red)
-            newState.redStoneCount--;
+            newState.RedStoneCount--;
         else if (currentState.CurrentPlayer == Stone.Blue)
-            newState.blueStoneCount--;
+            newState.BlueStoneCount--;
 
         //Megnézzük, hogy mindkettõ játékosnak le van-e rakva a 9-9 korongja, ha igen váltunk stage-t
         //Megszámoljuk kinek mennyi van és azt tároljuk el
-        if (newState.redStoneCount == 0 && newState.blueStoneCount == 0)
+        if (newState.RedStoneCount == 0 && newState.BlueStoneCount == 0)
         {
             newState.CurrentStage = Stage.Second;
-            newState.redStoneCount = CountPlayersStones(newState, Stone.Red);
-            newState.blueStoneCount = CountPlayersStones(newState, Stone.Blue);
+            newState.RedStoneCount = CountPlayersStones(newState, Stone.Red);
+            newState.BlueStoneCount = CountPlayersStones(newState, Stone.Blue);
         }
 
         CheckForRemoveStage(newState, position);

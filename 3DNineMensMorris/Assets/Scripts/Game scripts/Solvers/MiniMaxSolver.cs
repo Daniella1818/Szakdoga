@@ -18,19 +18,19 @@ public class MiniMaxSolver : ASolver
         Node currentNode = new Node(currentState);
         int bestValue = Minimax(currentNode, int.MinValue, int.MaxValue, true);
 
-        Node bestChild = null;
+        List<Node> bestChildren = new List<Node>();
         ShouldGenerateChildren = false;
         foreach (Node child in currentNode.Children)
         {
             int childValue = Minimax(child, int.MinValue, int.MaxValue, false);
             if (childValue == bestValue)
             {
-                bestChild = child;
-                break;
+                bestChildren.Add(child);
             }
         }
+        int index = Random.Range(0,bestChildren.Count);
 
-        return bestChild != null ? bestChild.State : null;
+        return bestChildren[index] != null ? bestChildren[index].State : null;
     }
 
     private int Minimax(Node node, int alpha, int beta, bool maximizingPlayer)

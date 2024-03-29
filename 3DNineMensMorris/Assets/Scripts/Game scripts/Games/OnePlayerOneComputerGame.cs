@@ -2,13 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnePlayerOneComputerGame : AGame
+public class OnePlayerOneComputerGame : AGame, IPlayerGame, IComputerGame
 {
     private ASolver solver;
-    private bool isFirstClick = false;
-
-    GameObject firstGameObject;
-    GameObject secondGameObject;
 
     private void Start()
     {
@@ -16,6 +12,8 @@ public class OnePlayerOneComputerGame : AGame
         solver = new MiniMaxSolver(3);
         StartCoroutine(Play());
     }
+
+
     void Update()
     {
         if (isNextPlayerCanPlay)
@@ -27,53 +25,10 @@ public class OnePlayerOneComputerGame : AGame
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (currentState.CurrentStage == Stage.First)
-                    {
-                        firstGameObject = hit.collider.gameObject;
-                        FirstStageStep(firstGameObject);
-                    }
-                    else if (currentState.CurrentStage == Stage.Remove)
-                    {
-                        firstGameObject = hit.collider.gameObject;
-                        RemoveStageStep(firstGameObject);
-                    }
-                    else if (currentState.CurrentStage == Stage.Second ||
-                             currentState.CurrentStage == Stage.Third)
-                    {
-                        if (!isFirstClick)
-                        {
-                            firstGameObject = hit.collider.gameObject;
-                            isFirstClick = true;
-                        }
-                        else
-                        {
-                            secondGameObject = hit.collider.gameObject;
-                            SecondOrThirdStageStep(firstGameObject, secondGameObject);
-                            isFirstClick = false;
-                        }
-                    }
+                    ClickWatcher(hit);
                 }
             }
         }
-    }
-
-    IEnumerator PlayerTurn()
-    {
-        while (isNextPlayerCanPlay)
-        {
-            yield return null;
-        }
-        ChangeColorBasedOnPlayer();
-        yield return null;
-    }
-
-    IEnumerator AITurn()
-    {
-        currentState = AIsMove(solver);
-        ColorTableAfterAIsMove(currentState);
-        IsStateRemove();
-        ChangeColorBasedOnPlayer();
-        yield return null;
     }
 
     protected override IEnumerator Play()
@@ -83,10 +38,29 @@ public class OnePlayerOneComputerGame : AGame
             if (isNextPlayerCanPlay)
                 yield return StartCoroutine(PlayerTurn());
             else
-                yield return StartCoroutine(AITurn());
+                yield return StartCoroutine(AIsTurn());
         }
 
         Stone status = currentState.GetStatus();
         Debug.Log("Winner: " + status);
+    }
+
+    public IEnumerator PlayerTurn()
+    {
+        while (isNextPlayerCanPlay)
+        {
+            yield return null;
+        }
+        ChangeColorBasedOnPlayer();
+        yield return null;
+    }
+
+    public IEnumerator AIsTurn()
+    {
+        currentState = AIsMove(solver);
+        ColorTableAfterAIsMove(currentState);
+        IsStateRemove();
+        ChangeColorBasedOnPlayer();
+        yield return null;
     }
 }

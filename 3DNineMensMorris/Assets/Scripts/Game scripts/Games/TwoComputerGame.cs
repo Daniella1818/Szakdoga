@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TwoComputerGame : AGame
+public class TwoComputerGame : AGame, IComputerGame
 {
     private ASolver solver;
     // Start is called before the first frame update
@@ -11,14 +11,6 @@ public class TwoComputerGame : AGame
         currentState = new State();
         solver = new MiniMaxSolver(3);
         StartCoroutine(Play());
-    }
-    IEnumerator AIsTurn()
-    {
-        currentState = AIsMove(solver);
-        currentState.ChangeHeuristics();
-        ColorTableAfterAIsMove(currentState);
-        ChangeColorBasedOnPlayer();
-        yield return null;
     }
 
     protected override IEnumerator Play()
@@ -30,5 +22,14 @@ public class TwoComputerGame : AGame
 
         Stone status = currentState.GetStatus();
         Debug.Log("Winner: " + status);
+    }
+
+    public IEnumerator AIsTurn()
+    {
+        currentState = AIsMove(solver);
+        currentState.ChangeHeuristics();
+        ColorTableAfterAIsMove(currentState);
+        ChangeColorBasedOnPlayer();
+        yield return null;
     }
 }

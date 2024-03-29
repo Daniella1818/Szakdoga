@@ -19,8 +19,8 @@ public class State : ICloneable
     //Ha remove stage van akkor ebbe mentjük az aktuálisat, hogy visszatudjunk térni rá
     public Stage LastStage;
 
-    public int redStoneCount = 9, blueStoneCount = 9;
-    public int currentPlayersMills = 0;
+    public int RedStoneCount = 9, BlueStoneCount = 9;
+    public int CurrentPlayersMills = 0;
 
     //Jelenlegi játékost cseréli, ez biztosítja, hogy egymás után lépjenek
     public void ChangePlayer()
@@ -48,7 +48,7 @@ public class State : ICloneable
             //Meg kellene nézni az összes saját korongját, és mellette lévõ helyeket, ha legalább egy olyan korongja van
             //ami mellett üres a hely akkor tud lépni egyébként nem
             //Ha nem tud lépni akkor az ellenfelet adjuk vissza nyeretesként
-            if (CurrentStage != Stage.Third && isCurrentPlayersHaveMovableStone() == false)
+            if (CurrentStage != Stage.Third && IsCurrentPlayersHaveMovableStone() == false)
             {
                 if (CurrentPlayer == Stone.Red)
                     return Stone.Blue;
@@ -56,9 +56,9 @@ public class State : ICloneable
                     return Stone.Red;
             }
 
-            if (blueStoneCount <= 2)
+            if (BlueStoneCount <= 2)
                 return Stone.Red;
-            else if (redStoneCount <= 2)
+            else if (RedStoneCount <= 2)
                 return Stone.Blue;
             else
                 return Stone.Empty;
@@ -135,9 +135,9 @@ public class State : ICloneable
         if (other.CurrentPlayer != CurrentPlayer ||
             other.CurrentStage != CurrentStage ||
             other.LastStage != LastStage ||
-            other.redStoneCount != redStoneCount ||
-            other.blueStoneCount != blueStoneCount ||
-            other.currentPlayersMills != currentPlayersMills)
+            other.RedStoneCount != RedStoneCount ||
+            other.BlueStoneCount != BlueStoneCount ||
+            other.CurrentPlayersMills != CurrentPlayersMills)
             return false;
 
         for (int w = 0; w < 3; w++)
@@ -161,12 +161,12 @@ public class State : ICloneable
         State newState = new State();
         newState.CurrentStage = CurrentStage;
         newState.LastStage = LastStage;
-        newState.currentPlayersMills = currentPlayersMills;
+        newState.CurrentPlayersMills = CurrentPlayersMills;
         newState.CurrentPlayer = CurrentPlayer;
         newState.Heuristics = Heuristics;
         newState.Table = (CubeTable)Table.Clone();
-        newState.redStoneCount = redStoneCount;
-        newState.blueStoneCount = blueStoneCount;
+        newState.RedStoneCount = RedStoneCount;
+        newState.BlueStoneCount = BlueStoneCount;
         return newState;
     }
     private bool HorizontalCheck(Position position, Stone player)
@@ -197,7 +197,7 @@ public class State : ICloneable
     //Megvizsgálja hogy a currentPlayer-nek 3 db korongja van-e vagy sem, ha igen akkor a harmadik stage-be
     //váltunk, egyébként a second stage marad
     
-    private bool isCurrentPlayersHaveMovableStone()
+    private bool IsCurrentPlayersHaveMovableStone()
     {
         bool canMove = true;
         //Ha találok egy olyan korongot amit tud bármerre mozgatni akkor tud mozogni a játékos

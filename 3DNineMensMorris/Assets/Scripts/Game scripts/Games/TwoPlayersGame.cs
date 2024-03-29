@@ -1,11 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-public class TwoPlayersGame : AGame
+public class TwoPlayersGame : AGame, IPlayerGame
 {
-    private bool isFirstClick = false;
-    GameObject firstGameObject;
-    GameObject secondGameObject;
     void Start()
     {
         currentState = new State();
@@ -23,35 +20,12 @@ public class TwoPlayersGame : AGame
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (currentState.CurrentStage == Stage.First)
-                    {
-                        firstGameObject = hit.collider.gameObject;
-                        FirstStageStep(firstGameObject);
-                    }
-                    else if (currentState.CurrentStage == Stage.Remove)
-                    {
-                        firstGameObject = hit.collider.gameObject;
-                        RemoveStageStep(firstGameObject);
-                    }
-                    else if (currentState.CurrentStage == Stage.Second ||
-                             currentState.CurrentStage == Stage.Third)
-                    {
-                        if (!isFirstClick)
-                        {
-                            firstGameObject = hit.collider.gameObject;
-                            isFirstClick = true;
-                        }
-                        else
-                        {
-                            secondGameObject = hit.collider.gameObject;
-                            SecondOrThirdStageStep(firstGameObject, secondGameObject);
-                            isFirstClick = false;
-                        }
-                    }
+                    ClickWatcher(hit);
                 }
             }
         }
     }
+
     protected override IEnumerator Play()
     {
         while (currentState.GetStatus() == Stone.Empty)
@@ -63,7 +37,8 @@ public class TwoPlayersGame : AGame
         Stone status = currentState.GetStatus();
         Debug.Log("Winner: " + status);
     }
-    IEnumerator PlayerTurn()
+
+    public IEnumerator PlayerTurn()
     {
         while (!isNextPlayerCanPlay)
         {

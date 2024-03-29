@@ -31,16 +31,16 @@ public abstract class AHeuristics
         if (player == Stone.Red)
         {
             currentPlayer = Stone.Red;
-            currentPlayersStone = currentState.redStoneCount;
+            currentPlayersStone = currentState.RedStoneCount;
             otherPlayer = Stone.Blue;
-            otherPlayersStone = currentState.blueStoneCount;
+            otherPlayersStone = currentState.BlueStoneCount;
         }
         else
         {
             currentPlayer = Stone.Blue;
-            currentPlayersStone = currentState.blueStoneCount;
+            currentPlayersStone = currentState.BlueStoneCount;
             otherPlayer = Stone.Red;
-            otherPlayersStone = currentState.redStoneCount;
+            otherPlayersStone = currentState.RedStoneCount;
         }
     }
 

@@ -9,6 +9,41 @@ public abstract class AGame : MonoBehaviour
     protected bool isPlaying = true;
     protected bool isNextPlayerCanPlay = true;
 
+
+    private bool isFirstClick = false;
+
+    private GameObject firstGameObject;
+    private GameObject secondGameObject;
+
+    protected void ClickWatcher(RaycastHit hit)
+    {
+        if (currentState.CurrentStage == Stage.First)
+        {
+            firstGameObject = hit.collider.gameObject;
+            FirstStageStep(firstGameObject);
+        }
+        else if (currentState.CurrentStage == Stage.Remove)
+        {
+            firstGameObject = hit.collider.gameObject;
+            RemoveStageStep(firstGameObject);
+        }
+        else if (currentState.CurrentStage == Stage.Second ||
+                 currentState.CurrentStage == Stage.Third)
+        {
+            if (!isFirstClick)
+            {
+                firstGameObject = hit.collider.gameObject;
+                isFirstClick = true;
+            }
+            else
+            {
+                secondGameObject = hit.collider.gameObject;
+                SecondOrThirdStageStep(firstGameObject, secondGameObject);
+                isFirstClick = false;
+            }
+        }
+    }
+
     protected abstract IEnumerator Play();
     private void ChangeColor(Color newColor, GameObject obj)
     {
