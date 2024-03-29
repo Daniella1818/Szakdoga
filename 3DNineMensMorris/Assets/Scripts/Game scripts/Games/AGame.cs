@@ -9,7 +9,6 @@ public abstract class AGame : MonoBehaviour
     protected bool isPlaying = true;
     protected bool isNextPlayerCanPlay = true;
 
-
     private bool isFirstClick = false;
 
     private GameObject firstGameObject;
@@ -135,7 +134,7 @@ public abstract class AGame : MonoBehaviour
             }
         }
     }
-    public void IsStateRemove()
+    protected void IsStateRemove()
     {
         //Ha nem vagyunk remove stage-be akkor az adott stage operátora elvégzi a játékos váltást!
         if (currentState.CurrentStage != Stage.Remove)

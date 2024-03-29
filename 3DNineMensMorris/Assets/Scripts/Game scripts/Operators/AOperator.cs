@@ -10,31 +10,31 @@ public abstract class AOperator
     public abstract State Apply(State currentState);
 
     //Meg vizsgálja hogy a paraméterben kapott játékosé-e a pozíción levõ kõ
-    public bool StoneIsPlayers(State currentState, Stone playersColor, Position position)
+    protected bool StoneIsPlayers(State currentState, Stone playersColor, Position position)
     {
         return currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
                 (int)position.Z] == playersColor;
     }
     //Megvizsgálja, hogy a pozíció üres-e
-    public bool PositionIsEmpty(State currentState, Position position)
+    protected bool PositionIsEmpty(State currentState, Position position)
     {
         return currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
             (int)position.Z] == Stone.Empty;
     }
     //Adott pozícióra teszi az aktuális játékost
-    public void SetStoneToPlace(State currentState, Position position)
+    protected void SetStoneToPlace(State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y, (int)position.Z] = currentState.CurrentPlayer;
     }
     //Felszabadítja a pozíciót
-    public void SetPlaceEmpty(State currentState, Position position)
+    protected void SetPlaceEmpty(State currentState, Position position)
     {
         currentState.Table.Board[(int)position.W, (int)position.X, (int)position.Y,
            (int)position.Z] = Stone.Empty;
     }
     
     //Minden operátorban(First,Second,Third) meg kell vizsgálni, hogy remove-be kell átváltani
-    public void CheckForRemoveStage(State currentState, Position position)
+    protected void CheckForRemoveStage(State currentState, Position position)
     {
         if (currentState.CountMill(position, currentState.CurrentPlayer) > 0)
         {
@@ -49,7 +49,7 @@ public abstract class AOperator
         }
     }
     //Remove state esetén vizsgáljuk, hogy még abban vagyunk-e
-    public void CheckIfStillRemoveStage(State currentState)
+    protected void CheckIfStillRemoveStage(State currentState)
     {
         if(currentState.CurrentPlayersMills == 0)
         {
@@ -61,7 +61,7 @@ public abstract class AOperator
 
     //Megvizsgálja hogy a másik játékosnak 3 db korongja van-e vagy sem, ha igen akkor a harmadik stage-be
     //váltunk, egyébként a second stage marad, mivel a kettõ játékos nem mindig ugyanakkor van harmadik stage-ben!
-    public void SwitchBetweenSecondAndThridStage(State currentState)
+    protected void SwitchBetweenSecondAndThridStage(State currentState)
     {
         if (currentState.CurrentStage == Stage.Second || currentState.CurrentStage == Stage.Third)
         {
@@ -78,7 +78,7 @@ public abstract class AOperator
         }
     }
 
-    public int CountPlayersStones(State currentState, Stone playerColor)
+    protected int CountPlayersStones(State currentState, Stone playerColor)
     {
         int playerStones = 0;
         for (int w = 0; w < currentState.Table.Board.GetLength(0); w++)
@@ -100,7 +100,7 @@ public abstract class AOperator
 
     //Remove-hoz kell, mert csak olyan korongot távolíthat el ami nincs malomban, viszont, ha csak olyan korongja van ami
     //malomban van akkor eltávolíthat egyet belõle. Ez azt vizsgálja, hogy van-e olyan korongja ami nem alkot malmot
-    public bool IsPlayerOnlyHaveStoneInMill(State currentState, Stone playerColor)
+    protected bool IsPlayerOnlyHaveStoneInMill(State currentState, Stone playerColor)
     {
         //Úgy vesszük, hogy igen, ha találunk egy olyan saját korongot ami nem malomban van akkor false-ra
         //váltunk és visszatérünk vele

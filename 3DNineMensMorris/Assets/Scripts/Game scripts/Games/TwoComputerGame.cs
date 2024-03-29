@@ -5,7 +5,6 @@ using UnityEngine;
 public class TwoComputerGame : AGame, IComputerGame
 {
     private ASolver solver;
-    // Start is called before the first frame update
     void Start()
     {
         currentState = new State();
