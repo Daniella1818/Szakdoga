@@ -29,15 +29,16 @@ public class DefensiveHeuristics : AHeuristics
         int result = 0;
         UpdatePlayersStatus(player);
 
-        //if (currentState.CurrentStage == Stage.Second)
-        //{
+        if (currentState.CurrentStage == Stage.Second)
+        {
             result += CountPlayerMoveableStones(currentPlayer) * MOVEABILITY;
             result -= CountPlayerMoveableStones(otherPlayer) * OTHER_PLAYER_MOVEABILITY;
-        //}
-        if (currentPlayersStone > otherPlayersStone)
-            result += PLAYERS_STONES;
-        else
-            result -= OTHER_PLAYERS_STONES;
+
+            if (currentPlayersStone > otherPlayersStone)
+                result += PLAYERS_STONES;
+            else
+                result -= OTHER_PLAYERS_STONES;
+        }
 
         result += CountPotentialMills(currentPlayer, otherPlayer);
         return result;
