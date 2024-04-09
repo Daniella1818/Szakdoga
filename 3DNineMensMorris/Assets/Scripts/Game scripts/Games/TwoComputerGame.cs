@@ -7,7 +7,7 @@ public class TwoComputerGame : AGame, IComputerGame
     private ASolver solver;
     void Start()
     {
-        currentState = new State();
+        currentState = new State(new CubeTable(), new DefensiveHeuristics());
         solver = new MiniMaxSolver(3);
         StartCoroutine(Play());
     }

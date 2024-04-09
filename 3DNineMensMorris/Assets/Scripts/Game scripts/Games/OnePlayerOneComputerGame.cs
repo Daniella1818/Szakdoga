@@ -8,7 +8,7 @@ public class OnePlayerOneComputerGame : AGame, IPlayerGame, IComputerGame
 
     private void Start()
     {
-        currentState = new State();
+        currentState = new State(new CubeTable(), new DefensiveHeuristics());
         solver = new MiniMaxSolver(3);
         StartCoroutine(Play());
     }

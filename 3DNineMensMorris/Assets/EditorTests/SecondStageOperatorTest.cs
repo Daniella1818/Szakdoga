@@ -12,7 +12,7 @@ public class SecondStageOperatorTest
     public void Applicability_StartPositionTest()
     {
         //Elsõ eset amikor a kezdõ pozíció nem a saját korongja
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Second;
         state.Table.Board[0, 0, 0, 0] = Stone.Blue;
         SecondStageOperator op = new SecondStageOperator(new Position(0, 0, 0, 0), new Position(0, 1, 0, 0));
@@ -26,7 +26,7 @@ public class SecondStageOperatorTest
     public void Applicability_EndPositionTest()
     {
         //Harmadik eset amikor a vég pozíció nem üres
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Second;
         state.Table.Board[0, 0, 0, 0] = Stone.Red;
         state.Table.Board[0, 1, 0, 0] = Stone.Blue;
@@ -40,7 +40,7 @@ public class SecondStageOperatorTest
     [Test]
     public void Applicability_FirstAndSecondParameterRelationTest()
     {
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Second;
         //Sarokból csak három irányba tud mozogni 1-et
         state.Table.Board[0, 0, 0, 0] = Stone.Red;
@@ -118,7 +118,7 @@ public class SecondStageOperatorTest
     {
         //Ötödik eset
         //Ha nem remove stage-ben vagyunk akkor nem alkalmazhatunk ilyen operátort, de minden más teljesül
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.First;
         state.Table.Board[0, 0, 0, 1] = Stone.Red;
         SecondStageOperator op = new SecondStageOperator(new Position(0, 0, 0, 1), new Position(0, 0, 1, 1));

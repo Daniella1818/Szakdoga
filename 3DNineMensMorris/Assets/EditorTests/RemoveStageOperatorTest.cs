@@ -13,7 +13,7 @@ public class RemoveStageOperatorTest
     public void Applicability_PositionTest()
     {
         //Elsõ eset amikor a saját színét akarja eltávolítani
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Remove;
         state.Table.Board[0, 0, 0, 0] = Stone.Red;
         RemoveStageOperator op = new RemoveStageOperator(new Position(0, 0, 0, 0));
@@ -32,7 +32,7 @@ public class RemoveStageOperatorTest
     public void Applicability_EnemyMillTest()
     {
         //Negyedik eset amikor az ellenfélnek csak olyan korongja van ami malomban van akkor eltávolítható egy közülük
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Remove;
         state.Table.Board[0, 0, 0, 0] = Stone.Blue;
         state.Table.Board[0, 0, 0, 1] = Stone.Blue;
@@ -54,7 +54,7 @@ public class RemoveStageOperatorTest
     {
         //Ötödik eset
         //Ha nem remove stage-ben vagyunk akkor nem alkalmazhatunk ilyen operátort, de minden más teljesül
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Second;
         state.Table.Board[0, 0, 0, 1] = Stone.Blue;
         RemoveStageOperator op = new RemoveStageOperator(new Position(0,0,0,1));

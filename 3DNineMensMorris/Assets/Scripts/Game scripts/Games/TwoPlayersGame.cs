@@ -5,7 +5,7 @@ public class TwoPlayersGame : AGame, IPlayerGame
 {
     void Start()
     {
-        currentState = new State();
+        currentState = new State(new CubeTable());
         StartCoroutine(Play());
     }
 

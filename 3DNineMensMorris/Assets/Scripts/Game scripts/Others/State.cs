@@ -5,12 +5,19 @@ using System;
 
 public class State : ICloneable
 {
-    public CubeTable Table;
+    public ATable Table;
     public AHeuristics Heuristics;
-    public State()
+    public State(ATable table)
+        :this(table, null)
     {
-        Table = new CubeTable();
-        Heuristics = new DefensiveHeuristics();
+    }
+    public State(ATable table, AHeuristics heuristics)
+    {
+        Table = table;
+        Heuristics = heuristics;
+    }
+    private State()
+    {
     }
 
     public Stone CurrentPlayer = Stone.Red;
@@ -164,7 +171,7 @@ public class State : ICloneable
         newState.CurrentPlayersMills = CurrentPlayersMills;
         newState.CurrentPlayer = CurrentPlayer;
         newState.Heuristics = Heuristics;
-        newState.Table = (CubeTable)Table.Clone();
+        newState.Table = (ATable)Table.Clone();
         newState.RedStoneCount = RedStoneCount;
         newState.BlueStoneCount = BlueStoneCount;
         return newState;

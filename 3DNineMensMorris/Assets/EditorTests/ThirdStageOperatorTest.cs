@@ -14,7 +14,7 @@ public class ThirdStageOperatorTest
     {
         //Elõször a kezdõ pozíciót vizsgáljuk, tehát hogy az övé a korong vagy sem
         //Kezdetben a piros kezd, tehát piros színû korongot lehet mozgatni
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Third;
 
         //Elsõ eset amikor nem az õ korongja van az elsõ pozíción
@@ -35,7 +35,7 @@ public class ThirdStageOperatorTest
     public void Applicability_EndPositionTest()
     {
         //Negyedik eset amikor a második pozició nem üres, akkor hamissal kell visszatérnie
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Third;
         state.Table.Board[1, 0, 0, 0] = Stone.Red;
         state.Table.Board[0, 0, 0, 1] = Stone.Blue;
@@ -53,7 +53,7 @@ public class ThirdStageOperatorTest
         //Hatodik eset
         //Ha nem third stage-ben vagyunk akkor nem alkalmazhatunk ilyen operátort, de minden más teljesül, tehát az
         //elsõ pozíció nem üres, a jelenlegi játékos színe van ami kezdetben piros
-        State state = new State();
+        State state = new State(new CubeTable());
         state.Table.Board[1, 0, 0, 0] = Stone.Red;
         state.CurrentStage = Stage.Second;
         ThirdStageOperator op = new ThirdStageOperator(new Position(1, 0, 0, 0), new Position(2, 0, 0, 0));

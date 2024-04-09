@@ -12,7 +12,7 @@ public class FirstStageOperatorTest
     public void Applicability_PositionTest()
     {
         //Ha olyan helyre tenné ami nem üres, akkor hamissal tér vissza
-        State state = new State();
+        State state = new State(new CubeTable());
         state.Table.Board[0, 0, 0, 0] = Stone.Blue;
         FirstStageOperator op = new FirstStageOperator(new Position(0,0,0,0));
         Assert.False(op.IsApplicable(state));
@@ -26,7 +26,7 @@ public class FirstStageOperatorTest
     public void ApplicabilityWhenStateIsNotInFirstStage()
     {
         //Hamissal kell visszatérnie ha nem First stage-be vagyunk
-        State state = new State();
+        State state = new State(new CubeTable());
         state.CurrentStage = Stage.Second;
         FirstStageOperator op = new FirstStageOperator(new Position(1, 0, 0, 0));
         Assert.False(op.IsApplicable(state));

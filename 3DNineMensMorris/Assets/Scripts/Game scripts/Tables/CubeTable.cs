@@ -29,12 +29,4 @@ public class CubeTable : ATable
             }
         }
     }
-    public new object Clone()
-    {
-        CubeTable clonedTable = new CubeTable();
-
-        Array.Copy(Board, clonedTable.Board, Board.Length);
-
-        return clonedTable;
-    }
 }
